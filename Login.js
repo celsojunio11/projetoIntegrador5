@@ -60,8 +60,9 @@ function HomeLogin({ navigation }) {
     const login = () => {
         firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
             navigation.navigate('Logado');
-        }).catch(() => {
-            navigation.navigate('FailedLogin');
+        }).catch((err) => {
+            alert(err)
+            //   navigation.navigate('FailedLogin');
         })
     }
 

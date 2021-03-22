@@ -1,4 +1,4 @@
- 
+
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, ScrollView, SafeAreaView, StyleSheet, TouchableOpacit, Image } from 'react-native';
 
@@ -167,7 +167,7 @@ function logado({ navigation }) {
 
 
     return (
-        <SafeAreaView>
+        <>
 
             <CustomHeader isHome={true} title={'Menu Principal'} />
 
@@ -176,10 +176,10 @@ function logado({ navigation }) {
             }} />
 
 
+            <ScrollView>
+                {data.map((item) => {
+                    return (
 
-            {data.map((item) => {
-                return (
-                    <ScrollView>
 
                         <Card>
                             <Card.Title>{item.nome}</Card.Title>
@@ -201,21 +201,22 @@ function logado({ navigation }) {
                             <Card.Divider />
 
                             <View style={{ flexDirection: 'row', }}>
-                                <Button buttonStyle={{ marginLeft: 25, backgroundColor: "#F7DE45" }} title="Atualizar Produto" onPress={() => navigation.navigate("AtualizarProduto", { data: item })} />
+                                <Button buttonStyle={{ backgroundColor: "#F7DE45" }} title="Atualizar Produto" onPress={() => navigation.navigate("AtualizarProduto", { data: item })} />
                                 <Button buttonStyle={{ marginLeft: 25, backgroundColor: "#E82D30" }} title="Deletar Produto" onPress={() => DeleteProduct(item.id)} />
                             </View>
                         </Card>
-                    </ScrollView>
-                )
-            })}
-        </SafeAreaView >
+
+                    )
+                })}
+            </ScrollView>
+        </>
 
     )
 }
 
 const styles = StyleSheet.create({
     containerInsert: {
-        padding: 5,
+        //padding: 5,
         backgroundColor: "#DDD"
     },
     input: {
