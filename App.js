@@ -12,10 +12,10 @@ function HomeScreen({ navigation }) {
 
   const style = StyleSheet.create({
     button: {
-      backgroundColor: 'red',
+      backgroundColor: '#f00',
       borderRadius: 100,
       borderWidth: 8,
-      borderColor: 'red',
+      borderColor: '#f00',
       width: 300,
       margin: 1,
       justifyContent: 'center',
@@ -38,7 +38,7 @@ function HomeScreen({ navigation }) {
       color: 'white',
       fontSize: 50,
       fontWeight: 'bold'
-      
+
 
     },
 
@@ -75,7 +75,7 @@ function HomeScreen({ navigation }) {
             <Button buttonStyle={style.button} title="Entrar com email" onPress={() => navigation.navigate('Login')} />
           </View>
 
-          <View style={{ marginBottom: -40}}>
+          <View style={{ marginBottom: -40 }}>
             <Button buttonStyle={style.buttonCadastro} title="Criar conta gratuita" onPress={() => navigation.navigate('Cadastro')} />
           </View>
 
@@ -90,7 +90,7 @@ const Stack = createStackNavigator();
 
 function App() {
   return (
-    
+
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }} >
         <Stack.Screen name="Home" component={HomeScreen} />
