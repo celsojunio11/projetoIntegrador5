@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, ScrollView, SafeAreaView, StyleSheet, TouchableOpacit, Image } from 'react-native';
+import { Alert, View, Text, FlatList, ScrollView, SafeAreaView, StyleSheet, TouchableOpacit, Image } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -8,10 +8,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Card, ListItem, Button, Icon } from 'react-native-elements'
 
 import { TextInput } from 'react-native-gesture-handler'
-import firebase from './firebaseConection';
+import firebase from '../services/firebaseConection';
 import { createStackNavigator } from '@react-navigation/stack';
-import CustomHeader from './Header';
 
+import CustomHeader from './../components/Header'
 
 function cadastrarProduto({ navigation }) {
 
@@ -156,7 +156,24 @@ function logado({ navigation }) {
 
 
     const DeleteProduct = async (id) => {
-        await firebase.firestore().collection('produto').doc(id).delete();
+        Alert.alert(
+            "Confirmação",
+            "Tem certeza que deseja excluir o produto?",
+
+            [
+
+                {
+                    text: "Cancelar",
+                    onPress: () => { },
+                    style: "cancel"
+                },
+                {
+                    text: "OK", onPress: async () => {
+                        await firebase.firestore().collection('produto').doc(id).delete()
+                    }
+                }
+            ]
+        )
     }
 
 

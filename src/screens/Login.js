@@ -3,11 +3,12 @@ import { StyleSheet, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { TextInput } from 'react-native-gesture-handler'
-import firebase from './firebaseConection'
+import firebase from '../services/firebaseConection'
 import Logado from './logado';
 import FailedLogin from './failedLogin';
 import { Button } from 'react-native-elements';
-import CustomHeader from './Header';
+
+import CustomHeader from './../components/Header'
 
 function HomeLogin({ navigation }) {
 
@@ -61,7 +62,7 @@ function HomeLogin({ navigation }) {
         firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
             navigation.navigate('Logado');
         }).catch((err) => {
-            alert(err)
+            alert(err);
             //   navigation.navigate('FailedLogin');
         })
     }

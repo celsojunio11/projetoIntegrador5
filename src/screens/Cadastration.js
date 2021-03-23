@@ -3,10 +3,10 @@ import { StyleSheet, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { TextInput } from 'react-native-gesture-handler'
-import firebase from './firebaseConection'
+import firebase from '../services/firebaseConection'
 import success from "./success";
 import { Button } from 'react-native-elements';
-import CustomHeader from './Header';
+import CustomHeader from './../components/Header'
 
 function TaskForm({ navigation }) {
 
@@ -69,7 +69,7 @@ function TaskForm({ navigation }) {
             <CustomHeader navigation={navigation} title={"Cadastro de Usuários"} />
 
             <View style={{ flex: 1, justifyContent: 'center', backgroundColor: '#DCDCDC', }}>
-               
+
                 <Text style={style.text}>Email</Text>
 
                 <TextInput style={{ alignItems: 'center', backgroundColor: 'white', textAlign: 'center', borderRadius: 50, borderWidth: 7, borderColor: '#DCDCDC', width: 350 }} value={email} onChangeText={(txtEmail) => onChangeEmail(txtEmail)} />
