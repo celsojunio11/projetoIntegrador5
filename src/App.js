@@ -5,8 +5,8 @@ import { Button } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Cadastro from './screens/Cadastration';
-import Login from './screens/Login';
+import Cadastro from './pages/Cadastration';
+import Login from './pages/Login';
 
 function HomeScreen({ navigation }) {
 
@@ -94,6 +94,7 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }} >
         <Stack.Screen name="Home" component={HomeScreen} />
+        {/* //component={HomeScreen}  */}
         <Stack.Screen name="Cadastro" component={Cadastro} />
         <Stack.Screen name="Login" component={Login} />
       </Stack.Navigator>
