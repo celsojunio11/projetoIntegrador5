@@ -4,6 +4,8 @@ import { Card, ListItem, Button, Icon } from 'react-native-elements'
 import { useCart } from '../../contexts/cart'
 import Header from '../../components/Header'
 
+import firebase from '../../services/firebaseConection'
+
 
 export default function cart(navigation) {
 
@@ -19,6 +21,31 @@ export default function cart(navigation) {
             </View>
 
         )
+    }
+
+
+
+
+    async function finalizar() {
+        let novoCarrinho = []
+
+        cart.map((x) => {
+            novoCarrinho.push(
+                { id: x.id, quantidade: x.quantidade })
+        })
+        try {
+            await firebase.firestore().collection('pedido').add({
+                idCliente: firebase.auth().currentUser.uid,
+                data: Date(),
+                itens: novoCarrinho,
+                observacao: '',
+                finalizado: false
+            })
+
+        } catch (error) {
+            alert(error)
+        }
+
     }
 
     return (
@@ -71,6 +98,7 @@ export default function cart(navigation) {
 
             </ScrollView>
             <Text>Valor Total: {totalValue} </Text>
+            <Button title="finalizar" buttonStyle={{ marginTop: 15 }} onPress={() => finalizar(cart)} />
         </View>
 
     )
