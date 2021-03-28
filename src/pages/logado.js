@@ -1,6 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, ScrollView, SafeAreaView, StyleSheet, TouchableOpacit, Image } from 'react-native';
+import { Alert, View, Text, FlatList, ScrollView, SafeAreaView, StyleSheet, TouchableOpacit, Image } from 'react-native';
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import IconEntypo from 'react-native-vector-icons/Entypo';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -8,10 +9,17 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Card, ListItem, Button, Icon } from 'react-native-elements'
 
 import { TextInput } from 'react-native-gesture-handler'
-import firebase from './firebaseConection';
+import firebase from '../services/firebaseConection';
 import { createStackNavigator } from '@react-navigation/stack';
-import CustomHeader from './Header';
 
+import CustomHeader from './../components/Header'
+
+import CartProvider from '../contexts/cart'
+import { useCart } from '../contexts/cart'
+
+
+import Home from '../pages/home'
+import Cart from '../pages/cart'
 
 function cadastrarProduto({ navigation }) {
 
@@ -156,7 +164,24 @@ function logado({ navigation }) {
 
 
     const DeleteProduct = async (id) => {
-        await firebase.firestore().collection('produto').doc(id).delete();
+        Alert.alert(
+            "Confirmação",
+            "Tem certeza que deseja excluir o produto?",
+
+            [
+
+                {
+                    text: "Cancelar",
+                    onPress: () => { },
+                    style: "cancel"
+                },
+                {
+                    text: "OK", onPress: async () => {
+                        await firebase.firestore().collection('produto').doc(id).delete()
+                    }
+                }
+            ]
+        )
     }
 
 
@@ -169,7 +194,7 @@ function logado({ navigation }) {
     return (
         <>
 
-            <CustomHeader isHome={true} title={'Menu Principal'} />
+            <CustomHeader isHome={true} title={'Produtos'} />
 
             <Button style={{ marginTop: 20 }} title="Inserir Produto" onPress={() => {
                 navigation.navigate("CadastrarProduto");
@@ -190,7 +215,7 @@ function logado({ navigation }) {
                                         width: 80,
                                         height: 100,
                                     }}
-                                    source={{ uri: 'https://api.tendaatacado.com.br/fotos/1588612800848.png' }}
+                                    source={{ uri: item.imagem }}
                                 />
 
                                 <View style={{ marginLeft: 50 }}>
@@ -232,7 +257,36 @@ const styles = StyleSheet.create({
 
 const Stack = createStackNavigator();
 
-function CadastrationForm() {
+const Tab = createBottomTabNavigator();
+
+function IconWithBadge() {
+
+    const { cart } = useCart();
+
+    return (
+        <View style={{ height: 24, width: 24, margin: 5, alignContent: 'center', justifyContent: 'center' }}>
+            <Text>{Object.keys(cart).length}</Text>
+        </View>
+    )
+}
+
+function IconHome() {
+    return (
+        <View>
+            <IconAntDesign name="home" size={30} color="#000" />
+        </View>
+    )
+}
+
+function IconProduto() {
+    return (
+        <View>
+            <IconEntypo name="shopping-bag" size={30} color="#000" />
+        </View>
+    )
+}
+
+function ProductStack() {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }} >
             <Stack.Screen name="logado" component={logado} />
@@ -240,6 +294,23 @@ function CadastrationForm() {
             <Stack.Screen name="AtualizarProduto" component={atualizarProduto} />
             {/* <Stack.Screen name="login" component={Login} /> */}
         </Stack.Navigator>
+    )
+}
+
+function CadastrationForm() {
+    return (
+
+        <CartProvider>
+            {/* <NavigationContainer> */}
+            <Tab.Navigator>
+                <Tab.Screen name="Home" component={Home} options={{ tabBarIcon: IconHome }} />
+                <Tab.Screen name="Cart" component={Cart} options={{ tabBarIcon: IconWithBadge }} />
+                <Tab.Screen name="Produtos" component={ProductStack} options={{ tabBarIcon: IconProduto }} />
+            </Tab.Navigator>
+            {/* </NavigationContainer> */}
+        </CartProvider>
+
+
     );
 }
 

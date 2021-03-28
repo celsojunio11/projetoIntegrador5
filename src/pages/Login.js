@@ -3,11 +3,12 @@ import { StyleSheet, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { TextInput } from 'react-native-gesture-handler'
-import firebase from './firebaseConection'
+import firebase from '../services/firebaseConection'
 import Logado from './logado';
 import FailedLogin from './failedLogin';
 import { Button } from 'react-native-elements';
-import CustomHeader from './Header';
+
+import CustomHeader from './../components/Header'
 
 function HomeLogin({ navigation }) {
 
@@ -61,8 +62,7 @@ function HomeLogin({ navigation }) {
         firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
             navigation.navigate('Logado');
         }).catch((err) => {
-            alert(err)
-            //   navigation.navigate('FailedLogin');
+            alert(err);
         })
     }
 
@@ -70,20 +70,13 @@ function HomeLogin({ navigation }) {
 
         <View style={{ flex: 1 }}>
             <CustomHeader navigation={navigation} title={"Login de Usuários"} />
-
-
             <View style={{ flex: 1, justifyContent: 'center', backgroundColor: '#DCDCDC', }}>
-
-
-
                 <Text style={style.text}>Email</Text>
                 <TextInput style={{ alignItems: 'center', backgroundColor: 'white', textAlign: 'center', borderRadius: 50, borderWidth: 7, borderColor: '#DCDCDC', width: 350 }} value={email} onChangeText={(txtEmail) => onChangeEmail(txtEmail)} />
                 <Text style={style.text}>Senha</Text>
-
                 <TextInput style={{ alignItems: 'center', backgroundColor: 'white', textAlign: 'center', borderRadius: 50, borderWidth: 7, borderColor: '#DCDCDC', width: 350 }} secureTextEntry={true} value={password} onChangeText={(txtPassword) => onChangePassword(txtPassword)} />
                 <Button buttonStyle={style.button} title="Login" onPress={login} />
-
-            </View >
+            </View>
         </View>
     )
 }

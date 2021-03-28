@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, ImageBackground } from 'react-native';
+import { Button } from 'react-native-elements';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Button } from 'react-native-elements';
-import Cadastro from './Cadastration';
-import Login from './Login';
 
-
+import Cadastro from './pages/Cadastration';
+import Login from './pages/Login';
 
 function HomeScreen({ navigation }) {
 
@@ -60,7 +60,7 @@ function HomeScreen({ navigation }) {
   return (
     <View style={style.container}>
       <ImageBackground
-        source={require('./imagemFundo/fundo.jpeg')}
+        source={require('./assets/imagemFundo/fundo.jpeg')}
         style={style.image}
       >
 
@@ -94,6 +94,7 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }} >
         <Stack.Screen name="Home" component={HomeScreen} />
+        {/* //component={HomeScreen}  */}
         <Stack.Screen name="Cadastro" component={Cadastro} />
         <Stack.Screen name="Login" component={Login} />
       </Stack.Navigator>
