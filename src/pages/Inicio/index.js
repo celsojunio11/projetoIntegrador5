@@ -12,7 +12,6 @@ export default function HomeScreen({ navigation }) {
                 source={require('../../assets/imagemFundo/fundo.jpeg')}
                 style={style.image}
             >
-
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', ImageBackground }}>
 
                     <View style={{ marginBottom: 100 }}>

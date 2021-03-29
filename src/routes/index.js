@@ -6,6 +6,7 @@ import { Text, View } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createDrawerNavigator } from '@react-navigation/drawer'
 
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconEntypo from 'react-native-vector-icons/Entypo';
@@ -14,7 +15,10 @@ import IconEntypo from 'react-native-vector-icons/Entypo';
 import CartProvider, { useCart } from '../contexts/cart'
 
 // importacao das páginas
-import { Inicio, Cadastro, Login, Carrinho, HomeApp, Success, ListarProduto, CadastrarProduto, AtualizarProduto } from '../pages'
+import { Inicio, Cadastro, Login, Carrinho, HomeApp, Endereco, Notificacao, Success, ListarProduto, CadastrarProduto, AtualizarProduto } from '../pages'
+
+// importacao do drawer personalizado
+import CustomDrawer from '../components/Drawer'
 
 
 function IconWithBadge() {
@@ -33,10 +37,14 @@ const Stack = createStackNavigator()
 
 const Tab = createBottomTabNavigator()
 
+const Drawer = createDrawerNavigator()
+
 function CarrinhoStack() {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }} >
             <Stack.Screen name="Carrinho" component={Carrinho} />
+            <Stack.Screen name="Endereco" component={Endereco} />
+
         </Stack.Navigator>
     )
 }
@@ -48,6 +56,19 @@ function ProdutoStack() {
             <Stack.Screen name="CadastrarProduto" component={CadastrarProduto} />
             <Stack.Screen name="AtualizarProduto" component={AtualizarProduto} />
         </Stack.Navigator>
+    )
+}
+
+function PadariaDrawer() {
+    return (
+        <CartProvider>
+            <Drawer.Navigator drawerContent={(props) => CustomDrawer(props)} >  
+                <Drawer.Screen name="Carrinho" component={Padaria} />
+                <Drawer.Screen name="Produtos" component={ProdutoStack} />
+                <Drawer.Screen name="Notificacao" component={Notificacao} />
+            </Drawer.Navigator>
+        </CartProvider>
+
     )
 }
 
@@ -75,7 +96,6 @@ function Padaria() {
                     inactiveTintColor: '#0B2031',
                 }}
             >
-                <Tab.Screen name="Produto" component={ProdutoStack} />
                 <Tab.Screen name="Home" component={HomeApp} />
                 <Tab.Screen name="Carrinho" component={CarrinhoStack} options={{ tabBarIcon: IconWithBadge }} />
             </Tab.Navigator>
@@ -89,7 +109,7 @@ function AutenticacaoStack() {
             <Stack.Screen name="Inicio" component={Inicio} />
             <Stack.Screen name="Cadastro" component={Cadastro} />
             <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Logado" component={Padaria} />
+            <Stack.Screen name="Logado" component={PadariaDrawer} />
             <Stack.Screen name="Success" component={Success} />
         </Stack.Navigator>
     )

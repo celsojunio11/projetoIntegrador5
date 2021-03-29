@@ -12,7 +12,7 @@ function CustomHeader({ title, isHome, navigation }) {
             {
                 isHome ?
                     <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.openDrawer()}>
                             <Text style={{ marginLeft: 15, color: "#fff", fontSize: 15 }}>
                                 <IconEntypo name="menu" size={30} color="#fff" />
                             </Text>

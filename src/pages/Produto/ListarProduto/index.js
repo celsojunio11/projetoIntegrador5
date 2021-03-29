@@ -71,9 +71,9 @@ function logado({ navigation }) {
     return (
         <>
 
-            <CustomHeader isHome={true} title={'Produtos'} />
+            <CustomHeader isHome={true} title={'Produtos'} navigation={navigation} />  
 
-            <Button style={{ marginTop: 20 }} title="Inserir Produto" onPress={() => {
+             <Button style={{ marginTop: 20 }} title="Inserir Produto" onPress={() => {
                 navigation.navigate("CadastrarProduto");
             }} />
 

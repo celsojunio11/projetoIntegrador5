@@ -7,7 +7,7 @@ import Header from '../../components/Header'
 import firebase from '../../services/firebaseConection'
 
 
-export default function cart(navigation) {
+export default function cart({ navigation }) {
 
     const { clear, add, remove, cart, totalValue, removeItem } = useCart()
 
@@ -24,8 +24,6 @@ export default function cart(navigation) {
     }
 
 
-
-
     async function finalizar() {
         let novoCarrinho = []
 
@@ -33,18 +31,20 @@ export default function cart(navigation) {
             novoCarrinho.push(
                 { id: x.id, quantidade: x.quantidade })
         })
-        try {
-            await firebase.firestore().collection('pedido').add({
-                idCliente: firebase.auth().currentUser.uid,
-                data: Date(),
-                itens: novoCarrinho,
-                observacao: '',
-                finalizado: false
-            })
-
-        } catch (error) {
-            alert(error)
+        const dados = {
+            idCliente: firebase.auth().currentUser.uid,
+            data: Date(),
+            itens: novoCarrinho,
+            observacao: '',
+            finalizado: false
         }
+
+        await firebase.firestore().collection('pedido').add(dados).then(
+            navigation.navigate('Endereco', { dados })
+        ).catch((err) => {
+            alert(err)
+        })
+
 
     }
 
@@ -87,9 +87,6 @@ export default function cart(navigation) {
 
                                 <View style={{ flexDirection: 'row', }}>
                                     <Button title='Remover ao carrinho' buttonStyle={{ marginLeft: 15 }} onPress={() => { removeItem(item) }} />
-
-                                    {/* <Button buttonStyle={{ backgroundColor: "#F7DE45" }} title="Atualizar Produto" onPress={() => navigation.navigate("AtualizarProduto", { data: item })} />
-                                    <Button buttonStyle={{ marginLeft: 25, backgroundColor: "#E82D30" }} title="Deletar Produto" onPress={() => DeleteProduct(item.id)} /> */}
                                 </View>
                             </Card>
                         )
@@ -98,7 +95,7 @@ export default function cart(navigation) {
 
             </ScrollView>
             <Text>Valor Total: {totalValue} </Text>
-            <Button title="finalizar" buttonStyle={{ marginTop: 15 }} onPress={() => finalizar(cart)} />
+            <Button title="Finalizar" buttonStyle={{ marginTop: 15 }} onPress={() => finalizar()} />
         </View>
 
     )

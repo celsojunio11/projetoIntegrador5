@@ -9,38 +9,9 @@ import { Card, ListItem, Button, Icon } from 'react-native-elements'
 import firebase from '../../services/firebaseConection';
 
 
-export default function home(navigation) {
+export default function home({ navigation }) {
 
     const { add } = useCart()
-
-
-    // const data = [
-    //     {
-    //         id: '1',
-    //         name: 'Leite',
-    //         price: 2,
-    //         quantidade: 1
-    //     },
-    //     {
-    //         id: '2',
-    //         name: 'Suco',
-    //         price: 3,
-    //         quantidade: 1
-    //     },
-    //     {
-    //         id: '3',
-    //         name: 'Pão',
-    //         price: 3,
-    //         quantidade: 1
-    //     },
-    //     {
-    //         id: '4',
-    //         name: 'broa',
-    //         price: 3,
-    //         quantidade: 1
-    //     }
-
-    // ]
 
     const [data, setData] = useState([]);
 
