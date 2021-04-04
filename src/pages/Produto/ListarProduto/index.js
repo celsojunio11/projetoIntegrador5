@@ -71,19 +71,19 @@ function logado({ navigation }) {
     return (
         <>
 
-            <CustomHeader isHome={true} title={'Produtos'} navigation={navigation} />  
+            <CustomHeader isHome={true} title={'Produtos'} navigation={navigation} />
 
-             <Button style={{ marginTop: 20 }} title="Inserir Produto" onPress={() => {
+            <Button style={{ marginTop: 20 }} title="Inserir Produto" onPress={() => {
                 navigation.navigate("CadastrarProduto");
             }} />
 
 
             <ScrollView>
-                {data.map((item) => {
+                {data.map((item, index) => {
                     return (
 
 
-                        <Card>
+                        <Card key={index}>
                             <Card.Title>{item.nome}</Card.Title>
                             <Card.Divider />
                             <View style={{ marginLeft: 25, flexDirection: 'row' }}>

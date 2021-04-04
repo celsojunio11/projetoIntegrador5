@@ -18,7 +18,15 @@ import CadastrarProduto from './Produto/CadastrarProduto'
 import AtualizarProduto from './Produto/AtualizarProduto'
 
 import Notificacao from './Notificacao'
+import Mapa from './Mapa'
 
-export { Inicio, Notificacao, Cadastro, Login, Carrinho, HomeApp, Finalizar, Endereco, Success, ListarProduto, CadastrarProduto, AtualizarProduto }
+import PadariasParceiras from './Padaria'
+import PadariaDetalhes from './PadariaDetalhes'
+
+
+PadariaDetalhes
+
+
+export { Inicio, PadariasParceiras, PadariaDetalhes, Notificacao, Mapa, Cadastro, Login, Carrinho, HomeApp, Finalizar, Endereco, Success, ListarProduto, CadastrarProduto, AtualizarProduto }
 
 

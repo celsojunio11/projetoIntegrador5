@@ -35,7 +35,7 @@ export default function home({ navigation }) {
     return (
         <View style={{ flex: 1 }}>
             <Header navigation={navigation} isHome={true} title={'Menu Principal'} />
-            <ScrollView>
+            {/* <ScrollView> */}
                 <FlatList
                     data={data}
                     // contentContainerStyle={{ flex: 1, width: '100%', padding: 10 }}
@@ -43,7 +43,7 @@ export default function home({ navigation }) {
                     renderItem={({ item, index }) => {
                         return (
                             // <View style={{ width: '100%', height: 100, padding: 10, borderWidth: 1, marginVertical: 10 }}>
-                            <View>
+                            <View key={index}>
                                 {/*  {item.name}</Text>
 
                                 <Text>Preço: {item.price}</Text>
@@ -79,7 +79,7 @@ export default function home({ navigation }) {
                     }}
 
                 />
-            </ScrollView>
+            {/* </ScrollView> */}
         </View>
     )
 
