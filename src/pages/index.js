@@ -18,6 +18,8 @@ import CadastrarProduto from './Produto/CadastrarProduto'
 import AtualizarProduto from './Produto/AtualizarProduto'
 
 import Notificacao from './Notificacao'
+import Config from './Config'
+
 import Mapa from './Mapa'
 
 import PadariasParceiras from './Padaria'
@@ -27,6 +29,6 @@ import PadariaDetalhes from './PadariaDetalhes'
 PadariaDetalhes
 
 
-export { Inicio, PadariasParceiras, PadariaDetalhes, Notificacao, Mapa, Cadastro, Login, Carrinho, HomeApp, Finalizar, Endereco, Success, ListarProduto, CadastrarProduto, AtualizarProduto }
+export { Inicio, PadariasParceiras, PadariaDetalhes, Config, Notificacao, Mapa, Cadastro, Login, Carrinho, HomeApp, Finalizar, Endereco, Success, ListarProduto, CadastrarProduto, AtualizarProduto }
 
 

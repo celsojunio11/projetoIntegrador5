@@ -15,7 +15,7 @@ import IconEntypo from 'react-native-vector-icons/Entypo';
 import CartProvider, { useCart } from '../contexts/cart'
 
 // importacao das páginas
-import { Inicio, Cadastro, Login, Carrinho, HomeApp, Endereco, Mapa, Notificacao, Success, ListarProduto, CadastrarProduto, AtualizarProduto, PadariasParceiras, PadariaDetalhes } from '../pages'
+import { Inicio, Cadastro, Login, Carrinho, HomeApp, Endereco, Mapa, Config, Notificacao, Success, ListarProduto, CadastrarProduto, AtualizarProduto, PadariasParceiras, PadariaDetalhes } from '../pages'
 
 // importacao do drawer personalizado
 import CustomDrawer from '../components/Drawer'
@@ -61,11 +61,13 @@ function ProdutoStack() {
 function PadariaDrawer() {
     return (
         <CartProvider>
-            <Drawer.Navigator> 
-                  {/* drawerContent={(props) => CustomDrawer(props)}  >  */}
+            <Drawer.Navigator>
+                {/* drawerContent={(props) => CustomDrawer(props)}  >  */}
                 <Drawer.Screen name="Carrinho" component={PadariaTab} />
                 <Drawer.Screen name="Produtos" component={ProdutoStack} />
                 <Drawer.Screen name="Notificacao" component={Notificacao} />
+                <Drawer.Screen name="Config" component={Config} />
+
                 {/* <Drawer.Screen name="Detalhes" component={PadariaDetalhes} />
                 <Drawer.Screen name="Padaria" component={PadariasParceiras} />
                 <Drawer.Screen name="Mapa" component={Mapa} /> */}
@@ -126,7 +128,7 @@ function App() {
         <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Autenticacao" component={AutenticacaoStack} />
-                <Stack.Screen name="Padaria" component={PadariaTab} />
+                <Stack.Screen name="Padaria" component={PadariaDrawer} />
             </Stack.Navigator>
         </NavigationContainer>
     )
