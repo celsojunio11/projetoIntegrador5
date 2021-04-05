@@ -23,7 +23,7 @@
 
       <meta-data
         android:name="com.google.android.geo.API_KEY" 
-        android:value="AIzaSyASn11UABatkzUh3XyyrEZ80uWBDv1TAWs"/>  <!--PASSAR API AQUI -->
+        android:value="AIzaSyASn11UABatkzUh3XyyrEZ80uWBDv1TAWs"/>  <!--PASSAR API KEY AQUI -->
 
       <uses-library android:name="org.apache.http.legacy" android:required="false"/>
      

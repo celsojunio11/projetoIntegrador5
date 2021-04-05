@@ -7,7 +7,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import firebase from '../../services/firebaseConection'
 
 // USANDO API DE TESTE
-import api from '../../services/api'
+import api from '../../services/apiMapaSaude'
 
 
 

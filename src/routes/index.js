@@ -61,14 +61,14 @@ function ProdutoStack() {
 function PadariaDrawer() {
     return (
         <CartProvider>
-            <Drawer.Navigator  drawerContent={(props) => CustomDrawer(props)}  > 
+            <Drawer.Navigator> 
+                  {/* drawerContent={(props) => CustomDrawer(props)}  >  */}
                 <Drawer.Screen name="Carrinho" component={PadariaTab} />
                 <Drawer.Screen name="Produtos" component={ProdutoStack} />
                 <Drawer.Screen name="Notificacao" component={Notificacao} />
-                <Drawer.Screen name="Detalhes" component={PadariaDetalhes} />
+                {/* <Drawer.Screen name="Detalhes" component={PadariaDetalhes} />
                 <Drawer.Screen name="Padaria" component={PadariasParceiras} />
-                <Drawer.Screen name="Mapa" component={Mapa} />
-
+                <Drawer.Screen name="Mapa" component={Mapa} /> */}
                 <Drawer.Screen name="Sair" component={AutenticacaoStack} />
 
 

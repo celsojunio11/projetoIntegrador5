@@ -1,12 +1,12 @@
 import React from 'react'
 import { TouchableOpacity, ScrollView, SafeAreaView, Text, StyleSheet, View } from 'react-native'
 
-function CustomDrawer(props) {
+function CustomDrawer({navigation}) {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
 
-            <ScrollView style={{ paddingLeft: 15, backgroundColor: "#DCDCDC" }}>
+            <ScrollView style={{ paddingLeft: 15, backgroundColor: "#fff" }}>
                 <TouchableOpacity style={{ marginTop: 15 }} onPress={() => { props.navigation.navigate('Carrinho') }}>
                     <Text style={{ fontSize: 25 }}>Carrinho</Text>
                 </TouchableOpacity>
