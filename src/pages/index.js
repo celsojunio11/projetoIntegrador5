@@ -8,7 +8,8 @@ import Success from './success'
 import Carrinho from './Carrinho';
 import HomeApp from './HomeApp'
 import Finalizar from './Finalizar'
-import Endereco from './Finalizar'
+import Endereco from './Endereco' 
+
 
 
 

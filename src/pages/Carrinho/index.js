@@ -95,7 +95,7 @@ export default function cart({ navigation }) {
 
             </ScrollView>
             <Text>Valor Total: {totalValue} </Text>
-            <Button title="Finalizar" buttonStyle={{ marginTop: 15 }} onPress={() => finalizar()} />
+            <Button title="Dados para entrega" buttonStyle={{ marginTop: 15 }} onPress={() => navigation.navigate('Endereco')} />
         </View>
 
     )
