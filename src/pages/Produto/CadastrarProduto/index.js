@@ -28,7 +28,7 @@ function cadastrarProduto({ navigation }) {
     }
 
     const onChangePreco = (txtPreco) => {
-        setPreco(txtPreco)
+        setPreco(parseInt(txtPreco))
     }
 
     const InsertProduct = async () => {

@@ -1,98 +1,104 @@
-import React, { useState } from 'react'
-import { View, Text } from 'react-native'
-import { Button } from 'react-native-elements'
-import { TextInput } from 'react-native-gesture-handler'
+import React, { useState } from 'react';
+import { View, Text, ScrollView, TextInput } from 'react-native';
+import { Button } from 'react-native-elements';
 
+import { Formik, Field } from 'formik'
+import CustomHeader from '../../components/Header'
+import CustomInput from '../../components/Input' 
+
+import * as yup from 'yup'
 import style from './styles'
+import axios from 'axios'
 
 import firebase from '../../services/firebaseConection'
-
-import CustomHeader from '../../components/Header'
-import { ScrollView } from 'react-native'
+import {} from 'react-native';
+import {  } from 'react-native';
 
 function Cadastro({ navigation }) {
 
-    const [nome, setNome] = useState('')
+    const validationSchema = yup.object().shape({
 
-    const [ddd, setDdd] = useState('')
-    const [telefone, setTelefone] = useState('')
+        nome: yup
+            .string()
+            .required('O campo nome é obrigatório'),
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+        email: yup
+            .string()
+            .email('Digite um email válido')
+            .required('O campo email é obrigatório'),
+
+        telefone: yup
+            .string()
+            .min(9, ({ min }) => `O telefone deve ter pelo menos ${min} caracteres`)
+            .required('O campo telefone é obrigatório'),
+
+        senha: yup
+            .string()
+            .min(6, ({ min }) => `A senha deve ter pelo menos ${min} caracteres.`)
+            .required('O campo senha é obrigatório'),
+
+        logradouro: yup
+            .string()
+            .required('O campo logradouro é obrigatório'),
+
+        numero: yup
+            .string()
+            .required('O campo numero é obrigatório'),
+
+        // complemento: yup
+        //     .string()
+        //     .required('O campo complemento é obrigatório'),
+
+        bairro: yup
+            .string()
+            .required('O campo bairro é obrigatório'),
+
+        cidade: yup
+            .string()
+            .required('O campo cidade é obrigatório'),
+
+        estado: yup
+            .string()
+            .required('O campo estado é obrigatório')
+            .length(2, ({ length }) => `O estado deve ter ${length} caracteres.`),
+
+        cep: yup
+            .string()
+            .length(8, ({ length }) => `O CEP deve ter ${length} caracteres.`),
+    })
 
     const [cep, setCep] = useState('')
-    const [logradouro, setLogradouro] = useState('')
-    const [numero, setNumero] = useState('')
-    const [complemento, setComplemento] = useState('')
-    const [bairro, setBairro] = useState('')
-    const [cidade, setCidade] = useState('')
-    const [estado, setEstado] = useState('')
-
-
-    const onChangeEmail = (txtEmail) => {
-        setEmail(txtEmail)
-    }
-
-    const onChangePassword = (txtPassword) => {
-        setPassword(txtPassword)
-    }
-
-    const onChangeNome = (txtNome) => {
-        setNome(txtNome)
-    }
-
-    const onChangeTelefone = (txtTelefone) => {
-        setTelefone(txtTelefone)
-    }
-
-    const onChangeDdd = (txtDdd) => {
-        setDdd(txtDdd)
-    }
-
-    const onChangeLogradouro = (txtLogradouro) => {
-        setLogradouro(txtLogradouro)
-    }
-
-    const onChangeNumero = (txtNumero) => {
-        setNumero(txtNumero)
-    }
-
-    const onChangeComplemento = (txtComplemento) => {
-        setComplemento(txtComplemento)
-    }
-
-    const onChangeBairro = (txtBairro) => {
-        setBairro(txtBairro)
-    }
-
-    const onChangeCidade = (txtCidade) => {
-        setCidade(txtCidade)
-    }
-
-    const onChangeEstado = (txtEstado) => {
-        setEstado(txtEstado)
-    }
 
     const onChangeCep = (txtCep) => {
         setCep(txtCep)
     }
 
-    const buscarCep = (cep) => {
-        fetch(`https://viacep.com.br/ws/${cep}/json/`)
-            .then(res => res.json())
-            .then((data) => {
-                setLogradouro(data.logradouro)
-                setComplemento(data.complemento)
-                setBairro(data.bairro)
-                setCidade(data.localidade)
-                setEstado(data.uf)
-            })
-            .catch((err) => alert(err))
+    const buscarCep = async (cep, setFieldValue) => {
+        if (!cep.length || cep.length !== 8) {
+            alert('CEP inválido')
+        } else {
+            try {
+                const { data } = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
+                const { logradouro, bairro, localidade: cidade, uf: estado } = data
+                setFieldValue('logradouro', logradouro)
+                setFieldValue('bairro', bairro)
+                setFieldValue('cidade', cidade)
+                setFieldValue('estado', estado)
+                setFieldValue('cep', cep)
+            } catch (err) {
+                alert(err)
+            }
+        }
+
     }
 
-    const Cadastration = () => {
+
+    const cadastrar = (values) => {
+        const { email, senha, nome, ddd, telefone, logradouro, numero, complemento, bairro, cidade, estado } = values
+
         // criar usuario no auth do firebase
-        firebase.auth().createUserWithEmailAndPassword(email, password).then(
+        firebase.auth().createUserWithEmailAndPassword(email, senha).then(
+
             (data) => {
                 const usuarioId = data.user.uid
 
@@ -101,75 +107,173 @@ function Cadastro({ navigation }) {
                     nome: nome,
                     email: email,
                     telefone: ddd + telefone,
-                    endereco: {
+                    endereco: [{
                         logradouro: logradouro,
                         numero: numero,
                         complemento: complemento,
                         bairro: bairro,
                         cidade: cidade,
                         estado: estado,
-                    }
+                    }]
                 })
-             
                 // navigation.navigate('Success')
-                navigation.navigate('Padaria')
+                navigation.navigate('Logado')
+
             }).catch((err) => {
                 alert(err)
             })
+
     }
 
     return (
+
         <View style={{ flex: 1 }}>
-            <CustomHeader navigation={navigation} title={"Cadastro de Usuários"} />
-            <ScrollView style={{ flex: 1 }}>
-                <View style={{ flex: 1, justifyContent: 'center', backgroundColor: '#DCDCDC', }}>
 
-                    <Text style={style.text}>Nome</Text>
-                    <TextInput style={style.input} value={nome} onChangeText={(txtNome) => onChangeNome(txtNome)} />
+            <CustomHeader navigation={navigation} title={'Cadastro de Usuários'} />
 
-                    <Text style={style.text}>DDD + Telefone</Text>
-                    <View style={{ flexDirection: 'row' }}>
-                        <TextInput style={[style.input, { width: '30%' }]} value={ddd} onChangeText={(txtDdd) => onChangeDdd(txtDdd)} />
-                        <TextInput style={[style.input, { width: '70%' }]} value={telefone} onChangeText={(txtTelefone) => onChangeTelefone(txtTelefone)} />
-                    </View>
+            <View style={{ flex: 1, justifyContent: 'center', backgroundColor: '#DCDCDC', }}>
+                <ScrollView>
 
-                    <Text style={style.text}>Email</Text>
-                    <TextInput style={style.input} value={email} onChangeText={(txtEmail) => onChangeEmail(txtEmail)} />
+                    <Formik validationSchema={validationSchema}
 
-                    <Text style={style.text}>Senha</Text>
-                    <TextInput secureTextEntry={true} style={style.input} value={password} onChangeText={(txtPassword) => onChangePassword(txtPassword)} />
+                        initialValues={{
+                            email: '',
+                            senha: '',
+                            nome: '',
+                            telefone: '',
+                            cep: '',
+                            logradouro: '',
+                            numero: '',
+                            complemento: '',
+                            bairro: '',
+                            cidade: '',
+                            estado: '',
+                        }}
 
-                    <Text style={style.text}>Buscar Cep</Text>
-                    <TextInput style={style.input} value={cep} onChangeText={(txtCep) => onChangeCep(txtCep)} onBlur={() => buscarCep(cep)} />
+                        onSubmit={(values) => {
+                            cadastrar(values)
+                        }}
+                    >
+                        {({ handleSubmit,
+                            setFieldValue, // modificar valores do campo de endereco 
+                            isValid // verifica se o objeto é lido
 
-                    <Text style={style.text}>Logradouro</Text>
-                    <TextInput style={style.input} value={logradouro} onChangeText={(textLogradouro) => onChangeLogradouro(textLogradouro)} />
+                        }) => (
+                            <>
+                                <Field
+                                    component={CustomInput}
+                                    name='nome'
+                                    placeholder='Nome'
+                                    label='Nome'
+                                />
 
-                    <Text style={style.text}>Número</Text>
-                    <TextInput style={style.input} value={numero} onChangeText={(textNumero) => onChangeNumero(textNumero)} />
+                                <View style={{ flexDirection: 'row' }}>
+                                    <View style={{ width: '30%' }}>
+                                        <Field
+                                            component={CustomInput}
+                                            name='ddd'
+                                            placeholder='DDD'
+                                            label='DDD'
+                                            keyboardType='number-pad'
+                                        />
+                                    </View>
+                                    <View style={{ width: '70%' }}>
+                                        <Field
+                                            component={CustomInput}
+                                            name='telefone'
+                                            placeholder='Telefone'
+                                            label='Telefone'
+                                            keyboardType='number-pad'
+                                        />
+                                    </View>
+                                </View>
 
-                    <Text style={style.text}>Complemento</Text>
-                    <TextInput style={style.input} value={complemento} onChangeText={(textComplemento) => onChangeComplemento(textComplemento)} />
 
-                    <Text style={style.text}>Bairro</Text>
-                    <TextInput style={style.input} value={bairro} onChangeText={(textBairro) => onChangeBairro(textBairro)} />
+                                <Field
+                                    component={CustomInput}
+                                    name='email'
+                                    placeholder='Email'
+                                    label='Email'
+                                    keyboardType='email-address'
+                                />
 
-                    <Text style={style.text}>Cidade</Text>
-                    <TextInput style={style.input} value={cidade} onChangeText={(textCidade) => onChangeCidade(textCidade)} />
+                                <Field
+                                    component={CustomInput}
+                                    name='senha'
+                                    placeholder='Senha'
+                                    label='Senha'
+                                    secureTextEntry
+                                />
 
+                                <Text style={[style.text, { marginBottom: 10 }]}>Buscar Cep</Text>
 
-                    <Text style={style.text}>Estado </Text>
-                    <TextInput style={style.input} value={estado} onChangeText={(textEstado) => onChangeEstado(textEstado)} />
+                                <TextInput
+                                    name='cep'
+                                    placeholder='Pesquisar CEP'
+                                    style={style.input}
+                                    value={cep}
+                                    onChangeText={(txtCep) => onChangeCep(txtCep)}
+                                    onBlur={() => buscarCep(cep, setFieldValue)}
+                                />
 
+                                <Field
+                                    component={CustomInput}
+                                    name='logradouro'
+                                    placeholder='Logradouro'
+                                    label='Logradouro'
+                                />
 
-                    <Button buttonStyle={style.button} title="Cadastrar" onPress={Cadastration} />
+                                <Field
+                                    component={CustomInput}
+                                    name='numero'
+                                    placeholder='Número'
+                                    label='Número'
+                                />
 
-                </View >
-            </ScrollView>
+                                <Field
+                                    component={CustomInput}
+                                    name='complemento'
+                                    placeholder='Complemento'
+                                    label='Complemento'
+                                />
+
+                                <Field
+                                    component={CustomInput}
+                                    name='bairro'
+                                    placeholder='Bairro'
+                                    label='Bairro'
+                                />
+
+                                <Field
+                                    component={CustomInput}
+                                    name='cidade'
+                                    placeholder='Cidade'
+                                    label='Cidade'
+                                />
+
+                                <Field
+                                    component={CustomInput}
+                                    name='estado'
+                                    placeholder='Estado'
+                                    label='Estado'
+                                />
+
+                                <Button buttonStyle={style.button}
+                                    onPress={handleSubmit}
+                                    title='Cadastrar'
+                                    disabled={!isValid}
+                                />
+
+                            </>
+                        )}
+                    </Formik>
+                </ScrollView>
+
+            </View>
 
         </View>
     )
 
 }
 
-export default Cadastro
+export default Cadastro;

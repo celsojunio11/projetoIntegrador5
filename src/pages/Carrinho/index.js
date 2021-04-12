@@ -1,10 +1,13 @@
 import React from 'react'
 import { View, Text, FlatList, TouchableOpacity, ScrollView, Image } from 'react-native'
 import { Card, ListItem, Button, Icon } from 'react-native-elements'
+// import { Ionicons } from 'react-native-vector-icons/Ionicons'
+import moment from 'moment'
 import { useCart } from '../../contexts/cart'
 import Header from '../../components/Header'
 
 import firebase from '../../services/firebaseConection'
+import { StyleSheet } from 'react-native'
 
 
 export default function cart({ navigation }) {
@@ -26,26 +29,86 @@ export default function cart({ navigation }) {
 
     async function finalizar() {
         let novoCarrinho = []
+        const dataAtual = new Date() // para salvar como timestamp
 
         cart.map((x) => {
             novoCarrinho.push(
-                { id: x.id, quantidade: x.quantidade })
+                { nome: x.nome, quantidade: x.quantidade }) // pra pegar só nome e quantidade
         })
+
         const dados = {
             idCliente: firebase.auth().currentUser.uid,
-            data: Date(),
+            data: dataAtual,
             itens: novoCarrinho,
             observacao: '',
             finalizado: false
         }
 
-        await firebase.firestore().collection('pedido').add(dados).then(
-            navigation.navigate('Endereco', { dados })
-        ).catch((err) => {
-            alert(err)
+        await firebase.firestore().collection('pedido').add(dados)
+            .then(
+                alert('Pedido cadastrado com sucesso')
+            )
+            .then(navigation.navigate('Endereco', { dados }))
+            .catch((err) => {
+                alert(err)
+            })
+
+    }
+
+    const Item = ({ item }) => {
+
+        const st = StyleSheet.create({
+            container: { width: '100%', borderRadius: 20 },
+            imagem: {
+                borderRadius: 50,
+                width: 100,
+                height: 100,
+            },
+            title: { textAlign: 'center', marginBottom: 10, textTransform: 'capitalize', fontSize: 18 },
+            content: { width: '65%', marginLeft: 50 },
+            descricao: { textTransform: 'capitalize', fontSize: 15 },
+            quantidade: { textTransform: 'capitalize', fontSize: 15, marginTop: 10 },
+
+            preco: { marginTop: 25, color: 'red', fontWeight: 'bold' }
         })
 
+        const { nome, preco, quantidade, imagem, descricao } = item
+        let subtotal = preco * quantidade
+        return (
+            <View>
+                <Card style={st.container}>
+                    <Card.Title style={st.title}>{nome}</Card.Title>
+                    <Card.Divider />
+                    <View style={{ flexDirection: 'row' }}>
+                        <View style={{ width: '20%', marginBottom: 20 }}>
+                            <Image
+                                style={st.imagem}
+                                source={{ uri: imagem }}
+                            />
+                        </View>
+                        <View style={st.content}>
+                            <ListItem.Subtitle style={st.descricao}>{descricao}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={st.quantidade}>{quantidade}</ListItem.Subtitle>
 
+                            <ListItem.Subtitle style={st.preco}> R$ {preco.toFixed(2).replace('.', ',')}</ListItem.Subtitle>
+                        </View>
+                    </View>
+                    <Card.Divider />
+                    <View style={{ alignItems: 'flex-end' }}>
+                        <View style={{ flexDirection: 'row', width: "100%", marginTop: 15 }}>
+                            {/* <TouchableOpacity>
+                                <Ionicons name='trash' />
+                            </TouchableOpacity> */}
+                            <Button success title='X' buttonStyle={{ marginLeft: 15, backgroundColor: '#dc3545' }} onPress={() => { removeItem(item) }} />
+
+                            <Button success title='-' buttonStyle={{ marginLeft: 15, backgroundColor: '#dc3545' }} onPress={() => { remove(item) }} />
+                            <Button title='+' buttonStyle={{ marginLeft: 15, backgroundColor: '#198754' }} onPress={() => { add(item) }} />
+                        </View>
+                    </View>
+                </Card>
+            </View>
+
+        )
     }
 
     return (
@@ -53,48 +116,14 @@ export default function cart({ navigation }) {
             <Header navigation={navigation} isHome={true} title={'Carrinho'} />
 
             <Button title="Limpar Carrinho" onPress={clear} />
-            <ScrollView>
-                <FlatList
-                    data={cart}
-                    contentContainerStyle={{ flex: 1, width: '100%', padding: 10 }}
-                    keyExtractor={(item) => { item.id }}
-                    renderItem={({ item }) => {
-                        return (
-                            <Card>
-                                <Card.Title>{item.nome}</Card.Title>
-                                <Card.Divider />
-                                <Image
-                                    style={{
-                                        width: 80,
-                                        height: 100,
-                                    }}
-                                    source={{ uri: item.imagem }}
-                                />
-                                <Card.Divider />
 
-                                <View style={{ flexDirection: 'row', width: "100%", marginTop: 15 }}>
-                                    <Button title='-' buttonStyle={{ marginLeft: 15 }} onPress={() => { remove(item) }} />
-                                    <Button title='+' buttonStyle={{ marginLeft: 15 }} onPress={() => { add(item) }} />
-                                </View>
-                                <View style={{ marginLeft: 50 }}>
-                                    <Text>{item.descricao}</Text>
-                                    <Text>QTD: {item.quantidade}</Text>
+            <FlatList
+                data={cart}
+                renderItem={Item}
+                keyExtractor={(data) => data.id}
+            />
 
-                                    <Text>R$ {item.preco}</Text>
-                                    <Text>SubTotal: R$ {item.preco * item.quantidade} </Text>
-                                </View>
-                                <Card.Divider />
-
-                                <View style={{ flexDirection: 'row', }}>
-                                    <Button title='Remover ao carrinho' buttonStyle={{ marginLeft: 15 }} onPress={() => { removeItem(item) }} />
-                                </View>
-                            </Card>
-                        )
-                    }}
-                />
-
-            </ScrollView>
-            <Text>Valor Total: {totalValue} </Text>
+            <Text>Valor Total: {totalValue.toFixed(2).replace('.', ',')} </Text>
             <Button title="Finalizar" buttonStyle={{ marginTop: 15 }} onPress={() => finalizar()} />
         </View>
 

@@ -10,6 +10,7 @@ import { TextInput } from 'react-native-gesture-handler'
 import firebase from '../../../services/firebaseConection';
 
 import CustomHeader from '../../../components/Header'
+import CustomCard from '../../../components/Card'
 
 import CartProvider from '../../../contexts/cart'
 import { useCart } from '../../../contexts/cart'
@@ -17,7 +18,7 @@ import { useCart } from '../../../contexts/cart'
 import styles from './styles'
 
 
-function logado({ navigation }) {
+function ListarProdutos({ navigation }) {
     // if (firebase.auth().currentUser !== null) {
 
     // } else {
@@ -26,7 +27,7 @@ function logado({ navigation }) {
 
     const [data, setData] = useState([]);
 
-    const GetProduct = async () => {
+    const getProduct = async () => {
         await firebase.firestore().collection('produto').onSnapshot(querySnapshot => {
             const data = [];
             querySnapshot.forEach(doc => {
@@ -39,80 +40,65 @@ function logado({ navigation }) {
         })
     }
 
-
-    const DeleteProduct = async (id) => {
-        Alert.alert(
-            "Confirmação",
-            "Tem certeza que deseja excluir o produto?",
-
-            [
-
-                {
-                    text: "Cancelar",
-                    onPress: () => { },
-                    style: "cancel"
-                },
-                {
-                    text: "OK", onPress: async () => {
-                        await firebase.firestore().collection('produto').doc(id).delete()
-                    }
-                }
-            ]
-        )
-    }
-
-
     useEffect(() => {
-        GetProduct();
+        getProduct();
     }, [])
 
 
 
+    const Item = ({ item }) => {
+        const st = StyleSheet.create({
+            container: { width: '100%', borderRadius: 20 },
+            imagem: {
+                borderRadius: 50,
+                width: 100,
+                height: 100,
+            },
+            title: { textAlign: 'center', marginBottom: 10, textTransform: 'capitalize', fontSize: 18 },
+            content: { width: '65%', marginLeft: 50 },
+            descricao: { textTransform: 'capitalize', fontSize: 15 },
+            preco: { marginTop: 25, color: 'red', fontWeight: 'bold' }
+        })
+
+        const { id, nome, descricao, imagem, preco, categoria } = item
+        return (
+            <View>
+                <Card style={st.container}>
+                    <Card.Title style={st.title}>{nome}</Card.Title>
+                    <Card.Divider />
+                    <View style={{ flexDirection: 'row' }}>
+                        <View style={{ width: '20%', marginBottom: 20 }}>
+                            <Image
+                                style={st.imagem}
+                                source={{ uri: imagem }}
+                            />
+                        </View>
+                        <View style={st.content}>
+                            <ListItem.Subtitle style={st.descricao}>{descricao}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={st.preco}> R$ {preco.toFixed(2).replace('.', ',')}</ListItem.Subtitle>
+                        </View>
+                    </View>
+                </Card>
+            </View>
+        )
+    }
+
     return (
         <>
-
             <CustomHeader isHome={true} title={'Produtos'} navigation={navigation} />
 
             <Button style={{ marginTop: 20 }} title="Inserir Produto" onPress={() => {
                 navigation.navigate("CadastrarProduto");
             }} />
 
+            <FlatList
+                data={data}
+                renderItem={Item}
+                keyExtractor={(item) => item.id}
+            />
 
-            <ScrollView>
-                {data.map((item, index) => {
-                    return (
-
-
-                        <Card key={index}>
-                            <Card.Title>{item.nome}</Card.Title>
-                            <Card.Divider />
-                            <View style={{ marginLeft: 25, flexDirection: 'row' }}>
-                                <Image
-                                    style={{
-                                        width: 80,
-                                        height: 100,
-                                    }}
-                                    source={{ uri: item.imagem }}
-                                />
-
-                                <View style={{ marginLeft: 50 }}>
-                                    <Text>{item.descricao}</Text>
-                                    <Text>R$ {item.preco}</Text>
-                                </View>
-                            </View>
-                            <Card.Divider />
-
-                            <View style={{ flexDirection: 'row', }}>
-                                <Button buttonStyle={{ backgroundColor: "#F7DE45" }} title="Atualizar Produto" onPress={() => navigation.navigate("AtualizarProduto", { data: item })} />
-                                <Button buttonStyle={{ marginLeft: 25, backgroundColor: "#E82D30" }} title="Deletar Produto" onPress={() => DeleteProduct(item.id)} />
-                            </View>
-                        </Card>
-
-                    )
-                })}
-            </ScrollView>
         </>
     )
 }
 
-export default logado;
+export default ListarProdutos;

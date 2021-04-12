@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, FlatList, TouchableOpacity, ScrollView, Image } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, ScrollView, Image, StyleSheet } from 'react-native'
 import { useCart } from '../../contexts/cart'
 import Header from '../../components/Header'
 
-import { Card, ListItem, Button, Icon } from 'react-native-elements'
+import { Card, ListItem, Button, } from 'react-native-elements'
 
+import CustomCard from '../../components/Card'
 
 import firebase from '../../services/firebaseConection';
 
@@ -15,7 +16,7 @@ export default function home({ navigation }) {
 
     const [data, setData] = useState([]);
 
-    const GetProduct = async () => {
+    const getProduct = async () => {
         await firebase.firestore().collection('produto').onSnapshot(querySnapshot => {
             const data = [];
             querySnapshot.forEach(doc => {
@@ -29,59 +30,67 @@ export default function home({ navigation }) {
     }
 
     useEffect(() => {
-        GetProduct()
+        getProduct()
     }, [])
+
+
+
+
+    const Item = ({ item }) => {
+
+        const st = StyleSheet.create({
+            container: { width: '100%', borderRadius: 20 },
+            imagem: {
+                borderRadius: 50,
+                width: 100,
+                height: 100,
+            },
+            title: { textAlign: 'center', marginBottom: 10, textTransform: 'capitalize', fontSize: 18 },
+            content: { width: '65%', marginLeft: 50 },
+            descricao: { textTransform: 'capitalize', fontSize: 15 },
+            preco: { marginTop: 25, color: 'red', fontWeight: 'bold' },
+            button: { backgroundColor: "#E22C43", alignItems: 'flex-end' }
+        })
+
+        const { id, nome, descricao, imagem, preco, categoria } = item
+        return (
+            <View>
+                <Card style={st.container}>
+                    <Card.Title style={st.title}>{nome}</Card.Title>
+                    <Card.Divider />
+                    <View style={{ flexDirection: 'row' }}>
+                        <View style={{ width: '20%', marginBottom: 20 }}>
+                            <Image
+                                style={st.imagem}
+                                source={{ uri: imagem }}
+                            />
+                        </View>
+                        <View style={st.content}>
+                            <ListItem.Subtitle style={st.descricao}>{descricao}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={st.preco}> R$ {preco.toFixed(2).replace('.', ',')}</ListItem.Subtitle>
+                        </View>
+                    </View>
+                    <Card.Divider />
+                    <View style={{ alignItems: 'flex-end' }}>
+                        <Button buttonStyle={st.button} title="Adicionar ao Carrinho" onPress={() => add(item)} />
+                    </View>
+                </Card>
+            </View>
+        )
+    }
+
 
     return (
         <View style={{ flex: 1 }}>
             <Header navigation={navigation} isHome={true} title={'Menu Principal'} />
-            {/* <ScrollView> */}
-                <FlatList
-                    data={data}
-                    // contentContainerStyle={{ flex: 1, width: '100%', padding: 10 }}
-                    keyExtractor={(item) => { item.id }}
-                    renderItem={({ item, index }) => {
-                        return (
-                            // <View style={{ width: '100%', height: 100, padding: 10, borderWidth: 1, marginVertical: 10 }}>
-                            <View key={index}>
-                                {/*  {item.name}</Text>
 
-                                <Text>Preço: {item.price}</Text>
+            <FlatList
+                data={data}
+                renderItem={Item}
+                keyExtractor={(item) => item.id}
+            />
 
-                                <View style={{ flexDirection: 'row', width: "100%", marginTop: 15 }}>
-                                    <Button title='Adicionar ao carrinho' buttonStyle={{ marginLeft: 15 }} onPress={() => { add(item) }} />
-                                </View> */}
-                                <Card>
-                                    <Card.Title>{item.nome}</Card.Title>
-                                    <Card.Divider />
-                                    <View style={{ marginLeft: 25, flexDirection: 'row' }}>
-                                        <Image
-                                            style={{
-                                                width: 80,
-                                                height: 100,
-                                            }}
-                                            source={{ uri: item.imagem }}
-                                        />
-
-                                        <View style={{ marginLeft: 50 }}>
-                                            <Text>{item.descricao}</Text>
-                                            <Text>Preço R$ {item.preco}</Text>
-                                        </View>
-                                    </View>
-                                    <Card.Divider />
-
-                                    <View style={{ flexDirection: 'row', }}>
-                                        <Button buttonStyle={{ backgroundColor: "#2089dc" }} title="Adicionar ao Carrinho" onPress={() => add(item)} />
-                                    </View>
-                                </Card>
-                            </View>
-                        )
-                    }}
-
-                />
-            {/* </ScrollView> */}
         </View>
     )
 
 }
-

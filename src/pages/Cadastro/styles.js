@@ -5,10 +5,11 @@ const style = StyleSheet.create({
     button: {
         backgroundColor: 'red',
         borderRadius: 20,
-        borderWidth: 7,
+        // borderWidth: 7,
         borderColor: 'red',
         width: 300,
-        margin: 100,
+        height: 45,
+        margin: 50,
         marginLeft: 30,
         justifyContent: 'center',
         marginBottom: 10,
