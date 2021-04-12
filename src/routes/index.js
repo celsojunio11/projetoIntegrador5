@@ -11,14 +11,44 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+
+//importacao das páginas
+// Autenticacao
+import Inicio from '../pages/Inicio'
+import Cadastro from '../pages/Cadastro';
+import Login from '../pages/Login';
+
+//Carrinho
+import Carrinho from '../pages/Carrinho';
+import HomeApp from '../pages/HomeApp'
+import Finalizar from '../pages/Finalizar'
+import Endereco from '../pages/Endereco'
+
+import EnderecoNovo from '../pages/Endereco/EnderecoNovo'
+import EnderecoPadrao from '../pages/Endereco/EnderecoPadrao'
+
+//Produto
+import ListarProduto from '../pages/Produto/ListarProduto'
+import CadastrarProduto from '../pages/Produto/CadastrarProduto'
+import AtualizarProduto from '../pages/Produto/AtualizarProduto'
+
+import Notificacao from '../pages/Notificacao'
+import Config from '../pages/Config'
+
+import Mapa from '../pages/Mapa'
+
+import PadariasParceiras from '../pages/Padaria'
+import PadariaDetalhes from '../pages/PadariaDetalhes'
+
+
 // importacao context
 import CartProvider, { useCart } from '../contexts/cart'
 import { Avatar, Badge, Icon, withBadge } from 'react-native-elements'
 // importacao das páginas
-import { Inicio, Cadastro, Login, Carrinho, HomeApp, Endereco, Mapa, Config, Notificacao, Success, ListarProduto, CadastrarProduto, AtualizarProduto, PadariasParceiras, PadariaDetalhes } from '../pages'
 
 // importacao do drawer personalizado
 import CustomDrawer from '../components/Drawer'
+
 
 
 function IconWithBadge(focused) {
@@ -56,8 +86,13 @@ const Drawer = createDrawerNavigator()
 function CarrinhoStack() {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }} >
-            <Stack.Screen name="Carrinho" component={Carrinho} />
+           <Stack.Screen name="Carrinho" component={Carrinho} /> 
+           <Stack.Screen name="Home" component={HomeApp} />
             <Stack.Screen name="Endereco" component={Endereco} />
+            <Stack.Screen name="Mapa" component={Mapa} />
+
+            <Stack.Screen name="EnderecoPadrao" component={EnderecoPadrao} />
+            <Stack.Screen name="EnderecoNovo" component={EnderecoNovo} />
         </Stack.Navigator>
     )
 }
@@ -136,7 +171,6 @@ function AutenticacaoStack() {
             <Stack.Screen name="Cadastro" component={Cadastro} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Logado" component={PadariaDrawer} />
-            <Stack.Screen name="Success" component={Success} />
         </Stack.Navigator>
     )
 }

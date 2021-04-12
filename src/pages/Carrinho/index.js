@@ -1,10 +1,11 @@
 import React from 'react'
 import { View, Text, FlatList, TouchableOpacity, ScrollView, Image } from 'react-native'
 import { Card, ListItem, Button, Icon } from 'react-native-elements'
-// import { Ionicons } from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import moment from 'moment'
 import { useCart } from '../../contexts/cart'
 import Header from '../../components/Header'
+
 
 import firebase from '../../services/firebaseConection'
 import { StyleSheet } from 'react-native'
@@ -48,7 +49,7 @@ export default function cart({ navigation }) {
             .then(
                 alert('Pedido cadastrado com sucesso')
             )
-            .then(navigation.navigate('Endereco', { dados }))
+            .then(navigation.navigate('Endereco', { idCliente: dados.idCliente }))
             .catch((err) => {
                 alert(err)
             })
@@ -91,18 +92,26 @@ export default function cart({ navigation }) {
                             <ListItem.Subtitle style={st.quantidade}>{quantidade}</ListItem.Subtitle>
 
                             <ListItem.Subtitle style={st.preco}> R$ {preco.toFixed(2).replace('.', ',')}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={st.subtotal}>Subtotal:  R$ {subtotal.toFixed(2).replace('.', ',')}</ListItem.Subtitle>
+
                         </View>
                     </View>
                     <Card.Divider />
                     <View style={{ alignItems: 'flex-end' }}>
                         <View style={{ flexDirection: 'row', width: "100%", marginTop: 15 }}>
-                            {/* <TouchableOpacity>
-                                <Ionicons name='trash' />
-                            </TouchableOpacity> */}
-                            <Button success title='X' buttonStyle={{ marginLeft: 15, backgroundColor: '#dc3545' }} onPress={() => { removeItem(item) }} />
 
-                            <Button success title='-' buttonStyle={{ marginLeft: 15, backgroundColor: '#dc3545' }} onPress={() => { remove(item) }} />
-                            <Button title='+' buttonStyle={{ marginLeft: 15, backgroundColor: '#198754' }} onPress={() => { add(item) }} />
+                            <TouchableOpacity>
+                                <Ionicons name='close-circle' size={30} onPress={() => { removeItem(item) }} />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={() => { remove(item) }} >
+                                <Ionicons name='remove-circle' size={30} color='#dc3545' />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={() => { add(item) }}>
+                                <Ionicons name='add-circle' size={30} color='#198754' />
+                            </TouchableOpacity>
+
                         </View>
                     </View>
                 </Card>
@@ -115,16 +124,20 @@ export default function cart({ navigation }) {
         <View style={{ flex: 1 }}>
             <Header navigation={navigation} isHome={true} title={'Carrinho'} />
 
-            <Button title="Limpar Carrinho" onPress={clear} />
+            {/* <Button title="Limpar Carrinho" onPress={clear} /> */}
 
             <FlatList
                 data={cart}
                 renderItem={Item}
                 keyExtractor={(data) => data.id}
             />
+            <Card>
+                <Text style={{ color: 'red', fontWeight: 'bold' }}>Valor Total da Compra </Text>
 
-            <Text>Valor Total: {totalValue.toFixed(2).replace('.', ',')} </Text>
-            <Button title="Finalizar" buttonStyle={{ marginTop: 15 }} onPress={() => finalizar()} />
+                <Text style={{ color: 'red', fontWeight: 'bold' }}>{totalValue.toFixed(2).replace('.', ',')} </Text>
+            </Card>
+            <Button title="Dados para entrega" buttonStyle={{ marginTop: 15 }} onPress={finalizar} />
+
         </View>
 
     )
