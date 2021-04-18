@@ -1,17 +1,19 @@
-import React from 'react'
-import { View, Text, FlatList, TouchableOpacity, ScrollView, Image } from 'react-native'
-import { Card, ListItem, Button, Icon } from 'react-native-elements'
+import React, { useState } from 'react'
+import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native'
+import { ListItem, Button, Icon } from 'react-native-elements'
+import { Card, Title, Paragraph, TextInput } from 'react-native-paper'
+
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import moment from 'moment'
+
 import { useCart } from '../../contexts/cart'
 import Header from '../../components/Header'
 
 
 import firebase from '../../services/firebaseConection'
-import { StyleSheet } from 'react-native'
+import style from './styles'
 
 
-export default function cart({ navigation }) {
+export default function Carrinho({ navigation }) {
 
     const { clear, add, remove, cart, totalValue, removeItem } = useCart()
 
@@ -27,8 +29,17 @@ export default function cart({ navigation }) {
         )
     }
 
+    const [observacao, setObservacao] = useState(null)
+    const [cardVisible, setCardVisible] = useState(true)
+    const [icon, setIcon] = useState('chevron-up-circle-outline')
 
-    async function finalizar() {
+    const trocaIcon = (icon) => {
+        icon ? setIcon('chevron-up-circle-outline')
+            : setIcon('chevron-down-circle-outline')
+        setCardVisible(icon)
+    }
+
+    async function finalizar(observacao) {
         let novoCarrinho = []
         const dataAtual = new Date() // para salvar como timestamp
 
@@ -41,7 +52,7 @@ export default function cart({ navigation }) {
             idCliente: firebase.auth().currentUser.uid,
             data: dataAtual,
             itens: novoCarrinho,
-            observacao: '',
+            observacao: observacao,
             finalizado: false
         }
 
@@ -57,67 +68,78 @@ export default function cart({ navigation }) {
     }
 
     const Item = ({ item }) => {
-
         const st = StyleSheet.create({
-            container: { width: '100%', borderRadius: 20 },
+            container: { borderRadius: 20, margin: 10 },
             imagem: {
                 borderRadius: 50,
                 width: 100,
                 height: 100,
             },
-            title: { textAlign: 'center', marginBottom: 10, textTransform: 'capitalize', fontSize: 18 },
+            title: { marginLeft: 5, fontSize: 18 },
             content: { width: '65%', marginLeft: 50 },
-            descricao: { textTransform: 'capitalize', fontSize: 15 },
-            quantidade: { textTransform: 'capitalize', fontSize: 15, marginTop: 10 },
-
-            preco: { marginTop: 25, color: 'red', fontWeight: 'bold' }
+            descricao: { marginLeft: 5, fontSize: 15 },
+            quantidade: { margin: 20, },
+            preco: { marginTop: 25, color: 'red', fontWeight: 'bold', }
         })
 
-        const { nome, preco, quantidade, imagem, descricao } = item
+        const { id, nome, descricao, imagem, preco, categoria, quantidade } = item
         let subtotal = preco * quantidade
+
         return (
-            <View>
-                <Card style={st.container}>
-                    <Card.Title style={st.title}>{nome}</Card.Title>
-                    <Card.Divider />
+
+            <Card style={st.container}>
+                <Card.Content>
+
                     <View style={{ flexDirection: 'row' }}>
-                        <View style={{ width: '20%', marginBottom: 20 }}>
+                        <View style={{ marginRight: 20, flex: 1 }}>
                             <Image
                                 style={st.imagem}
                                 source={{ uri: imagem }}
                             />
                         </View>
-                        <View style={st.content}>
-                            <ListItem.Subtitle style={st.descricao}>{descricao}</ListItem.Subtitle>
-                            <ListItem.Subtitle style={st.quantidade}>{quantidade}</ListItem.Subtitle>
+                        <View style={{ flex: 1 }}>
+                            <Title>{nome}</Title>
+                            <Paragraph style={st.descricao}>{descricao}</Paragraph>
+                            <Paragraph style={st.preco}> R$ {preco.toFixed(2).replace('.', ',')}</Paragraph>
 
-                            <ListItem.Subtitle style={st.preco}> R$ {preco.toFixed(2).replace('.', ',')}</ListItem.Subtitle>
-                            <ListItem.Subtitle style={st.subtotal}>Subtotal:  R$ {subtotal.toFixed(2).replace('.', ',')}</ListItem.Subtitle>
+                            <View style={{ justifyContent: 'center', flexDirection: 'row', marginLeft: -50, marginTop: 10 }} >
 
+                                <TouchableOpacity onPress={() => { remove(item) }} >
+                                    <Ionicons name='remove-circle' size={30} color='#dc3545' />
+                                </TouchableOpacity>
+
+                                <Paragraph style={st.quantidade}>{quantidade}</Paragraph>
+
+                                <TouchableOpacity onPress={() => { add(item) }}>
+                                    <Ionicons name='add-circle' size={30} color='#198754' />
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                    <Card.Divider />
-                    <View style={{ alignItems: 'flex-end' }}>
-                        <View style={{ flexDirection: 'row', width: "100%", marginTop: 15 }}>
+
+                        <View>
 
                             <TouchableOpacity>
-                                <Ionicons name='close-circle' size={30} onPress={() => { removeItem(item) }} />
+                                <Ionicons name='close-circle' size={30} color='#616161' onPress={() => { removeItem(item) }} />
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={() => { remove(item) }} >
-                                <Ionicons name='remove-circle' size={30} color='#dc3545' />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity onPress={() => { add(item) }}>
-                                <Ionicons name='add-circle' size={30} color='#198754' />
-                            </TouchableOpacity>
 
                         </View>
-                    </View>
-                </Card>
-            </View>
 
+                    </View>
+
+
+                    <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', marginTop: 15, fontWeight: 'bold' }}>
+                        <Paragraph style={{ margin: 20, color: 'red' }}> R$ {subtotal.toFixed(2).replace('.', ',')}</Paragraph>
+                    </View>
+                </Card.Content>
+
+
+            </Card >
         )
+    }
+
+    const onChange = (txt) => {
+        setObservacao(txt)
     }
 
     return (
@@ -131,14 +153,42 @@ export default function cart({ navigation }) {
                 renderItem={Item}
                 keyExtractor={(data) => data.id}
             />
-            <Card>
-                <Text style={{ color: 'red', fontWeight: 'bold' }}>Valor Total da Compra </Text>
 
-                <Text style={{ color: 'red', fontWeight: 'bold' }}>{totalValue.toFixed(2).replace('.', ',')} </Text>
+            <Card style={{ margin: 10, paddingHorizontal: 10 }}>
+                <TouchableOpacity style={{ flex: 1 }} onPress={() => {
+                    trocaIcon(!cardVisible)
+                }}
+                    style={{ justifyContent: 'flex-end', alignItems: 'flex-end', marginTop: 15, marginRight: 20, fontWeight: 'bold' }}>
+                    <Ionicons name={icon} size={30} color='red' />
+                </TouchableOpacity>
+                <View style={{ height: 50 }}>
+                    <Text style={{ color: '#000', fontWeight: 'bold' }}>Valor Total da Compra </Text>
+
+                    <Text style={{ color: 'red', fontWeight: 'bold' }}>{totalValue.toFixed(2).replace('.', ',')} </Text>
+                </View>
+                <View style={{ margin: 10 }}>
+                    {
+                        cardVisible
+                            ?
+                            <View />
+                            :
+                            <View>
+                                 {/* style={{  height: 250}}> */}
+                                <TextInput
+                                    mode='outlined'
+                                    name='obsevacao'
+                                    placeholder='Observação'
+                                    style={style.input}
+                                    value={observacao}
+                                    onChangeText={(txt) => onChange(txt)}
+                                />
+                                <Button title="Dados para entrega" buttonStyle={{ marginTop: 15 }} onPress={() => finalizar(observacao)} />
+                            </View>
+                    }
+                </View>
+
             </Card>
-            <Button title="Dados para entrega" buttonStyle={{ marginTop: 15 }} onPress={finalizar} />
 
-        </View>
-
+        </View >
     )
 }

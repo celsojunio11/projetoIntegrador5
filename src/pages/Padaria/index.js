@@ -40,19 +40,22 @@ export default function Padaria({ navigation }) {
     }
 
     const getPadarias = async () => {
-        await firebase.firestore().collection('padaria').get().then((querySnapshot) => {
-            const data = []
-            querySnapshot.forEach(doc => {
-                data.push({
-                    ...doc.data(),
-                    id: doc.id
+        try {
+            await firebase.firestore().collection('padaria').get().then((querySnapshot) => {
+                const data = []
+                querySnapshot.forEach(doc => {
+                    data.push({
+                        ...doc.data(),
+                        id: doc.id
+                    })
+
                 })
+                setPadaria(data)
 
             })
-            setPadaria(data)
-
-        })
-
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 

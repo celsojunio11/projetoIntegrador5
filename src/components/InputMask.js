@@ -1,17 +1,20 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { TextInput } from 'react-native-paper';
+import TextInputMask from 'react-native-text-input-mask';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 function CustomInput(props) {
     const {
-        icon,
+        action, icon, mask,
         field: { name, onBlur, onChange, value },
         form: { errors, touched, setFieldTouched },
         ...inputProps
     } = props
 
     const hasError = errors[name] && touched[name]
+
     return (
 
         <View>
@@ -25,6 +28,13 @@ function CustomInput(props) {
                     }}
                     name={icon} size={20} color='#0B2031' />
                 <TextInput mode='outlined'
+                    render={props =>
+
+                        <TextInputMask
+                            {...props}
+                            mask={mask}
+                        />
+                    }
                     error={hasError}
                     selectionColor='#ff0'
                     underlineColor='#ff0'
@@ -40,6 +50,7 @@ function CustomInput(props) {
 
                     }}
                     onBlur={() => {
+                        action(value)
                         setFieldTouched(name)
                         onBlur(name)
                     }}

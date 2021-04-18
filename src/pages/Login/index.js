@@ -5,7 +5,7 @@ import { Formik, Field } from 'formik'
 import CustomHeader from '../../components/Header'
 import CustomInput from '../../components/Input'
 import * as yup from 'yup'
-import style from './styles'
+import style from './styles' 
 
 import firebase from '../../services/firebaseConection'
 
@@ -41,8 +41,8 @@ function Login({ navigation }) {
                 <Formik validationSchema={validationSchema}
 
                     initialValues={{
-                        email: '',
-                        senha: ''
+                        email: 'joao@teste.com',
+                        senha: '123456'
                     }}
 
                     onSubmit={({ email, senha }) => login(email, senha)}
@@ -54,6 +54,7 @@ function Login({ navigation }) {
                                 name='email'
                                 placeholder='Email'
                                 label='Email'
+                                icon={'mail'}
                                 keyboardType='email-address'
                             />
 
@@ -62,6 +63,7 @@ function Login({ navigation }) {
                                 name='senha'
                                 placeholder='Senha'
                                 label='Senha'
+                                icon={'lock-open'}
                                 secureTextEntry
                             />
 

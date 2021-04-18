@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TextInput } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
+import { TextInput } from 'react-native-paper';
 
 import { Formik, Field } from 'formik'
 import CustomHeader from '../../components/Header'
-import CustomInput from '../../components/Input' 
+import CustomInput from '../../components/Input'
+import CustomInputMask from '../../components/InputMask'
+import TextInputMask from 'react-native-text-input-mask';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import * as yup from 'yup'
 import style from './styles'
 import axios from 'axios'
 
 import firebase from '../../services/firebaseConection'
-import {} from 'react-native';
-import {  } from 'react-native';
+
 
 function Cadastro({ navigation }) {
 
@@ -64,16 +67,14 @@ function Cadastro({ navigation }) {
 
         cep: yup
             .string()
-            .length(8, ({ length }) => `O CEP deve ter ${length} caracteres.`),
+            .required('O campo estado é obrigatório')
+        //  .length(9, ({ length }) => `O CEP deve ter ${length - 1} caracteres.`),
     })
 
-    const [cep, setCep] = useState('')
+    const [exist, setExist] = useState(false)
 
-    const onChangeCep = (txtCep) => {
-        setCep(txtCep)
-    }
-
-    const buscarCep = async (cep, setFieldValue) => {
+    const buscarCep = async (value, setFieldValue) => {
+        let cep = value.replace('-', '') // remover a formatação
         if (!cep.length || cep.length !== 8) {
             alert('CEP inválido')
         } else {
@@ -85,6 +86,7 @@ function Cadastro({ navigation }) {
                 setFieldValue('cidade', cidade)
                 setFieldValue('estado', estado)
                 setFieldValue('cep', cep)
+                setExist(true)
             } catch (err) {
                 alert(err)
             }
@@ -108,6 +110,7 @@ function Cadastro({ navigation }) {
                     email: email,
                     telefone: ddd + telefone,
                     endereco: [{
+                        entrega: true,
                         logradouro: logradouro,
                         numero: numero,
                         complemento: complemento,
@@ -116,7 +119,6 @@ function Cadastro({ navigation }) {
                         estado: estado,
                     }]
                 })
-                // navigation.navigate('Success')
                 navigation.navigate('Logado')
 
             }).catch((err) => {
@@ -163,35 +165,25 @@ function Cadastro({ navigation }) {
                                 <Field
                                     component={CustomInput}
                                     name='nome'
+                                    icon={'person'}
                                     placeholder='Nome'
                                     label='Nome'
                                 />
 
-                                <View style={{ flexDirection: 'row' }}>
-                                    <View style={{ width: '30%' }}>
-                                        <Field
-                                            component={CustomInput}
-                                            name='ddd'
-                                            placeholder='DDD'
-                                            label='DDD'
-                                            keyboardType='number-pad'
-                                        />
-                                    </View>
-                                    <View style={{ width: '70%' }}>
-                                        <Field
-                                            component={CustomInput}
-                                            name='telefone'
-                                            placeholder='Telefone'
-                                            label='Telefone'
-                                            keyboardType='number-pad'
-                                        />
-                                    </View>
-                                </View>
-
+                                <Field
+                                    component={CustomInputMask}
+                                    name='telefone'
+                                    icon={'call'}
+                                    mask="([00]) [00000]-[0000]"
+                                    placeholder='Telefone'
+                                    label='Telefone'
+                                    keyboardType='numeric'
+                                />
 
                                 <Field
                                     component={CustomInput}
                                     name='email'
+                                    icon={'mail'}
                                     placeholder='Email'
                                     label='Email'
                                     keyboardType='email-address'
@@ -200,63 +192,79 @@ function Cadastro({ navigation }) {
                                 <Field
                                     component={CustomInput}
                                     name='senha'
+                                    icon={'lock-open'}
+
                                     placeholder='Senha'
                                     label='Senha'
                                     secureTextEntry
                                 />
 
-                                <Text style={[style.text, { marginBottom: 10 }]}>Buscar Cep</Text>
-
-                                <TextInput
+                                <Field
+                                    component={CustomInputMask}
                                     name='cep'
-                                    placeholder='Pesquisar CEP'
-                                    style={style.input}
-                                    value={cep}
-                                    onChangeText={(txtCep) => onChangeCep(txtCep)}
-                                    onBlur={() => buscarCep(cep, setFieldValue)}
+                                    mask="[00000]-[000]"
+                                    action={(cep) => buscarCep(cep, setFieldValue)}
+                                    icon='search'
+                                    placeholder='Pesquisar'
+                                    label='Pesquisar CEP'
                                 />
 
-                                <Field
-                                    component={CustomInput}
-                                    name='logradouro'
-                                    placeholder='Logradouro'
-                                    label='Logradouro'
-                                />
+                                {exist
 
-                                <Field
-                                    component={CustomInput}
-                                    name='numero'
-                                    placeholder='Número'
-                                    label='Número'
-                                />
+                                    ?
+                                    <View>
+                                        <Field
+                                            component={CustomInput}
+                                            icon='location'
+                                            name='logradouro'
+                                            placeholder='Logradouro'
+                                            label='Logradouro'
+                                        />
 
-                                <Field
-                                    component={CustomInput}
-                                    name='complemento'
-                                    placeholder='Complemento'
-                                    label='Complemento'
-                                />
+                                        <Field
+                                            icon='location'
+                                            component={CustomInput}
+                                            name='numero'
+                                            placeholder='Número'
+                                            label='Número'
+                                        />
 
-                                <Field
-                                    component={CustomInput}
-                                    name='bairro'
-                                    placeholder='Bairro'
-                                    label='Bairro'
-                                />
+                                        <Field
+                                            icon='location'
+                                            component={CustomInput}
+                                            name='complemento'
+                                            placeholder='Complemento'
+                                            label='Complemento'
+                                        />
 
-                                <Field
-                                    component={CustomInput}
-                                    name='cidade'
-                                    placeholder='Cidade'
-                                    label='Cidade'
-                                />
+                                        <Field
+                                            icon='location'
+                                            component={CustomInput}
+                                            name='bairro'
+                                            placeholder='Bairro'
+                                            label='Bairro'
+                                        />
 
-                                <Field
-                                    component={CustomInput}
-                                    name='estado'
-                                    placeholder='Estado'
-                                    label='Estado'
-                                />
+                                        <Field
+                                            icon='location'
+                                            component={CustomInput}
+                                            name='cidade'
+                                            placeholder='Cidade'
+                                            label='Cidade'
+                                        />
+
+                                        <Field
+                                            icon='location'
+                                            component={CustomInput}
+                                            name='estado'
+                                            placeholder='Estado'
+                                            label='Estado'
+                                        />
+                                    </View>
+                                    :
+                                    <View />
+                                }
+
 
                                 <Button buttonStyle={style.button}
                                     onPress={handleSubmit}
