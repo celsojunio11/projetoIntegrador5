@@ -13,7 +13,6 @@ import api from '../../services/apiMapaSaude'
 
 import Header from '../../components/Header'
 
-import config from '../../config/config.json'
 
 import styles from './styles'
 

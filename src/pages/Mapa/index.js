@@ -4,10 +4,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import MapView, { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 
-
 import Header from '../../components/Header'
-
-import config from '../../config/config.json'
 
 const { height, width } = Dimensions.get('window')
 
@@ -64,7 +61,7 @@ function Mapa({ navigation }) {
                     <MapViewDirections
                         destination={destino}
                         origin={origem}
-                        apikey={config.googleApiFaturamento}
+                        apikey={env.process.GOOGLE_API_FATURAMENTO}
                         strokeColor={'#333'} // cor da linha
                         strokeWidth={10}  // alterar espessura da linha do trajeto
                         onReady={({ coordinates, distance }) => {
@@ -98,7 +95,7 @@ function Mapa({ navigation }) {
                         enablePoweredByContainer={false}
                         fetchDetails
                         query={{
-                            key: config.googleApiFaturamento,
+                            key: env.process.GOOGLE_API_FATURAMENTO,
                             language: 'pt-br',
                         }}
 

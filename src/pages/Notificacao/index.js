@@ -4,13 +4,12 @@ import Header from '../../components/Header'
 
 // notificação
 import OneSignal from 'react-native-onesignal'
-import config from '../../config/config.json'
 import api from '../../services/apiOneSignal'
 
 function Notificacao({ navigation }) {
 
     useEffect(() => {
-        OneSignal.init(config.oneSignal)
+        OneSignal.init(process.env.ONE_SIGNAL)
 
         OneSignal.addEventListener('opened', opened)
 
