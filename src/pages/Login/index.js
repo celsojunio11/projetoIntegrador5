@@ -41,8 +41,8 @@ function Login({ navigation }) {
                 <Formik validationSchema={validationSchema}
 
                     initialValues={{
-                        email: 'joao@teste.com',
-                        senha: '123456'
+                        email: '',
+                        senha: ''
                     }}
 
                     onSubmit={({ email, senha }) => login(email, senha)}

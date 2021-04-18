@@ -13,29 +13,8 @@ function CustomTabBar(props) {//{ title, isHome, navigation }) {
     const { state, navigation } = props
 
     const { routeNames } = state
-
-    console.log(routeNames)
-    // screenOptions={({ route }) => ({
-    //   tabBarIcon: ({ focused, color, size }) => {
-    //     let iconName;
-
-    //     if (route.name === 'Home') {
-    //       iconName = focused
-    //         ? 'home'
-    //         : 'home-outline';
-    //     } else if (route.name === 'Carrinho') {
-    //       iconName = focused
-    //         ? 'cart'
-    //         : 'cart-outline';
-    //     }
-
-    //     return <Ionicons name={iconName} size={size} color={color} />;
-    //   },
-    // })}
-    // tabBarOptions={{
-    //   activeTintColor: '#E22C43',
-    //   inactiveTintColor: 'gray',
-    // }}
+ 
+ 
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
