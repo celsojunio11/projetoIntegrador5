@@ -17,8 +17,7 @@ export default function home({ navigation }) {
 
     const [data, setData] = useState([]);
 
-    const [pesquisa, setPesquisa] = useState(null);
-    const [tipo, setTipo] = useState('categoria');
+    const [pesquisa, setPesquisa] = useState(null); 
 
     const pesquisar = async (search) => {
         setPesquisa(search)

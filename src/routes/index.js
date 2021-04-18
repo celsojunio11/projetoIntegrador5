@@ -31,6 +31,7 @@ import EnderecoPadrao from '../pages/Endereco/EnderecoPadrao'
 
 //Produto
 import ListarProduto from '../pages/Produto/ListarProduto'
+import PesquisarProduto from '../pages/Produto/PesquisarProduto'
 
 import Notificacao from '../pages/Notificacao'
 import Config from '../pages/Config'
@@ -103,7 +104,7 @@ function ProdutoStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }} >
       <Stack.Screen name="ListarProduto" component={ListarProduto} />
-      {/* <Stack.Screen name="PesquisarProduto" component={PesquisarProduto} /> */}
+      <Stack.Screen name="PesquisarProduto" component={PesquisarProduto} />
     </Stack.Navigator>
   )
 }

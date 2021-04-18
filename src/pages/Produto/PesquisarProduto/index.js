@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Alert, View, Text, FlatList, ScrollView, SafeAreaView, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import { Alert, View, Text, FlatList, ScrollView, SafeAreaView, StyleSheet, TouchableOpacit, Image } from 'react-native'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import IconEntypo from 'react-native-vector-icons/Entypo'
 
@@ -17,15 +17,11 @@ import CartProvider from '../../../contexts/cart'
 import { useCart } from '../../../contexts/cart'
 
 import styles from './styles'
-import { } from 'react-native'
 
 
-function ListarProdutos({ navigation }) {
-    // if (firebase.auth().currentUser !== null) {
+function ListarProdutos({ navigation, route }) {
 
-    // } else {
-    //     navigation.navigate('login')
-    // }
+    const categoria = route.params
 
     const [data, setData] = useState([])
 
@@ -34,75 +30,58 @@ function ListarProdutos({ navigation }) {
     const pesquisar = async (search) => {
         setPesquisa(search)
         getProduct(search)
-    }
+    } 
 
-    const getProduct = async (pesquisa) => {
-        const categoria = []
-        let newData = []
+    const getProduct = async () => {
         if (!pesquisa) {
             await firebase.firestore().collection('produto')
+                .where('categoria', '==', categoria)
+
                 .onSnapshot(
                     querySnapshot => {
                         const data = []
                         querySnapshot.forEach(doc => {
-                            categoria.push(doc.data().categoria)
                             data.push({
                                 ...doc.data(),
                                 id: doc.id
                             })
                         })
-
-                        categoria.filter(
-                            function (elem, index, self) {
-                                index === self.indexOf(elem)
-                                    ? newData.push(data[index])
-                                    : console.log('false')
-
-                            }
-                        )
-
-                        setData(newData)
+                        setData(data)
                     },
                     error => {
                         console.log(error)
                     }
                 )
         }
-
         else {
-
             await firebase.firestore().collection('produto')
-                .where('categoria', '==', pesquisa)
-                // .where()
-                .onSnapshot(querySnapshot => {
-                    const data = []
-                    querySnapshot.forEach(doc => {
-                        categoria.push(doc.data().categoria)
-
-                        data.push({
-                            ...doc.data(),
-                            id: doc.id
+                // .where('categoria', '==', categoria)
+                .where('descricao', '==', pesquisa)
+                .onSnapshot(
+                    querySnapshot => {
+                        const data = []
+                        querySnapshot.forEach(doc => {
+                            data.push({
+                                ...doc.data(),
+                                id: doc.id
+                            })
                         })
-                    })
-
-                    categoria.filter(
-                        function (elem, index, self) {
-                            index === self.indexOf(elem)
-                                ? newData.push(data[index])
-                                : console.log('false')
-                        }
-                    )
-
-                    setData(newData)
-                })
+                        setData(data)
+                    },
+                    error => {
+                        console.log(error)
+                    }
+                )
         }
     }
 
+
     useEffect(() => {
         getProduct()
+        return () => clearTimeout(timer);
+
     }, [])
-
-
+  
 
     const Item = ({ item }) => {
         const st = StyleSheet.create({
@@ -122,7 +101,7 @@ function ListarProdutos({ navigation }) {
         return (
 
             <Card style={st.container}>
-                <TouchableOpacity onPress={() => navigation.navigate('PesquisarProduto', categoria)} style={{ margin: 10, padding: 10 }}>
+                <Card.Content>
 
                     <View style={{ flexDirection: 'row' }}>
                         <View style={{ marginRight: 20 }}>
@@ -131,23 +110,20 @@ function ListarProdutos({ navigation }) {
                                 source={{ uri: imagem }}
                             />
                         </View>
-                        <View style={{ flexDirection: 'column' }}>
+                        <View>
                             <Title>{nome}</Title>
-                            <Paragraph style={st.descricao}>Mais de 10 variedades de {categoria}</Paragraph>
+                            <Paragraph style={st.descricao}>{descricao}</Paragraph>
+                            <Paragraph style={st.preco}> R$ {preco.toFixed(2).replace('.', ',')}</Paragraph>
                         </View>
                     </View>
-                </TouchableOpacity>
+                </Card.Content>
             </Card>
         )
     }
 
     return (
         <>
-            <CustomHeader isHome={true} title={'Produtos'} navigation={navigation} />
-
-            {/* <Button style={{ marginTop: 20 }} title="Pesquisar Produto" onPress={() => {
-                navigation.navigate("PesquisarProduto")
-            }} /> */}
+            <CustomHeader title={'Produtos'} navigation={navigation} />
 
             <Searchbar
                 placeholder="Digite para pesquisar"
