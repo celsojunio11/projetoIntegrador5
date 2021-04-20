@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, FlatList, TouchableOpacity, ScrollView, Image, StyleSheet } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, ScrollView, Image, StyleSheet, Pressable } from 'react-native'
 import { useCart } from '../../contexts/cart'
 import Header from '../../components/Header'
 
@@ -17,7 +17,7 @@ export default function home({ navigation }) {
 
     const [data, setData] = useState([]);
 
-    const [pesquisa, setPesquisa] = useState(null); 
+    const [pesquisa, setPesquisa] = useState(null);
 
     const pesquisar = async (search) => {
         setPesquisa(search)
@@ -65,6 +65,8 @@ export default function home({ navigation }) {
     useEffect(() => {
         getProduct()
     }, [])
+
+
 
 
     const Item = ({ item }) => {
@@ -125,6 +127,7 @@ export default function home({ navigation }) {
                 renderItem={Item}
                 keyExtractor={(item) => item.id}
             />
+            
 
         </View>
     )
