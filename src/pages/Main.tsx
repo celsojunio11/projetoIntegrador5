@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react'
+<<<<<<< HEAD:src/pages/Main.tsx
 import { View, Text, FlatList, TouchableOpacity, ScrollView, Image, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useCart } from '../contexts/cart'
 import Header from '../components/Header'
+=======
+import { View, Text, FlatList, TouchableOpacity, ScrollView, Image, StyleSheet, Pressable } from 'react-native'
+import { useCart } from '../../contexts/cart'
+import Header from '../../components/Header'
+>>>>>>> origin:src/pages/HomeApp/index.js
 
 import { ListItem, Button } from 'react-native-elements'
 import { Searchbar, Card, Title, Paragraph } from 'react-native-paper'
@@ -27,7 +33,11 @@ export function Main() {
 
     const [data, setData] = useState<[]>([])
 
+<<<<<<< HEAD:src/pages/Main.tsx
     const [pesquisa, setPesquisa] = useState<string>('');
+=======
+    const [pesquisa, setPesquisa] = useState(null);
+>>>>>>> origin:src/pages/HomeApp/index.js
 
     const pesquisar = async (search: string) => {
         setPesquisa(search)
@@ -79,7 +89,14 @@ export function Main() {
     }, [])
 
 
+<<<<<<< HEAD:src/pages/Main.tsx
     const Item = ({ item }: { item: ProdutoProps }) => {
+=======
+
+
+    const Item = ({ item }) => {
+
+>>>>>>> origin:src/pages/HomeApp/index.js
         const st = StyleSheet.create({
             container: { borderRadius: 20, margin: 10 },
             imagem: {
@@ -136,6 +153,7 @@ export function Main() {
                 renderItem={Item}
                 keyExtractor={({ id }) => id}
             />
+            
 
         </View>
     )
