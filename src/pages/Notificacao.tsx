@@ -13,7 +13,7 @@ export function Notificacao() {
 
 
     useEffect(() => {
-        OneSignal.init(process.env.ONE_SIGNAL)
+        OneSignal.init('9e0b97f6-b531-4e0b-8296-c7f3617ced15')
 
         OneSignal.addEventListener('opened', opened)
 
@@ -29,15 +29,15 @@ export function Notificacao() {
     }
 
 
-    async function enviarNotificacao() {
-        const data = {
-            "app_id": "9e0b97f6-b531-4e0b-8296-c7f3617ced15", // PEGA DO ONE SIGNAL
-            "included_segments": ["Subscribed Users"], // GRUPO DAS PESSOAS QUE VÃO RECEBER NOTIFICACAO
-            "contents": { "en": "Descrição da mensagem" }, // CORPO DA NOTIFICACAO
-            "headings": { "en": "Titulo da mensagem" } // TITULO DA NOTIFICACÃO
-        }
-        await api.post('/notifications', data)
-    }
+    // async function enviarNotificacao() {
+    //     const data = {
+    //         "app_id": "9e0b97f6-b531-4e0b-8296-c7f3617ced15", // PEGA DO ONE SIGNAL
+    //         "included_segments": ["Subscribed Users"], // GRUPO DAS PESSOAS QUE VÃO RECEBER NOTIFICACAO
+    //         "contents": { "en": "Descrição da mensagem" }, // CORPO DA NOTIFICACAO
+    //         "headings": { "en": "Titulo da mensagem" } // TITULO DA NOTIFICACÃO
+    //     }
+    //     await api.post('/notifications', data)
+    // }*/
 
 
     return (
@@ -46,8 +46,6 @@ export function Notificacao() {
             <Header title={'Notificações'} navigation={navigation} />
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 
-                <Text>Notificacao</Text>
-                <Button title="Enviar Notificação" onPress={enviarNotificacao} />
             </View>
         </View>
     )
