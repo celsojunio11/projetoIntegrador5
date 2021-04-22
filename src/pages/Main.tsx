@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { View, Text, FlatList, TouchableOpacity, ScrollView, Image, StyleSheet, Pressable } from 'react-native'
-
-import { useCart } from '../contexts/useCart'
+import { useCart } from '../contexts/cart'
 import Header from '../components/Header'
 
 import { ListItem, Button } from 'react-native-elements'
