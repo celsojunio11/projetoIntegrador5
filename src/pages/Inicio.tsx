@@ -1,11 +1,26 @@
 
 import * as React from 'react';
-import { StyleSheet, View, Text, ImageBackground } from 'react-native';
+import { StyleSheet, View, Text, ImageBackground,Alert } from 'react-native';
 import { Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native'
+import apiLoginGoogle from '../../src/services/apiLoginGoogle';
+import Icon from 'react-native-vector-icons/FontAwesome'
+import { useState } from 'react';
+
 const imagemFundo = require('../assets/imagemFundo/fundo.jpeg')
 
 export function Inicio() {
+
+
+    /*const actionLoginGoogle = async () => {
+        let result = apiLoginGoogle.googleLogar();
+
+        if(result){
+
+        }else{
+            Alert.alert('Erro login Google');
+        }
+    }*/
 
     const navigation = useNavigation()
 
@@ -29,6 +44,16 @@ export function Inicio() {
                     <View style={{ marginBottom: -40 }}>
                         <Button buttonStyle={style.buttonCadastro} title="Criar conta gratuita" onPress={() => navigation.navigate('Cadastro')} />
                     </View>
+
+                    <View style={{ marginBottom: -30 }}>
+                        <Button buttonStyle={style.buttonGoogle} title="Fazer login com Google" /*onPress={actionLoginGoogle} *//>
+                        
+                    </View>
+
+                    <View style={{ marginBottom: -30 }}>
+                    <Icon name='google' size={30} color='#4169E1'/>
+                    </View>
+                    
                 </View>
 
             </ImageBackground>
@@ -49,6 +74,20 @@ const style = StyleSheet.create({
         justifyContent: 'center',
         marginBottom: -15
 
+    },
+    buttonGoogle: {
+        backgroundColor: 'transparent',
+        borderRadius: 20,
+        // borderWidth: 7,
+        borderColor: 'white',
+        width: 300,
+        height: 45,
+        // margin: 100,
+        marginTop: 100,
+        marginLeft: 15,
+       
+        justifyContent: 'center',
+        marginBottom: 20,
     },
 
     buttonCadastro: {
