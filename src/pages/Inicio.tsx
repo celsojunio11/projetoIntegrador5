@@ -1,5 +1,5 @@
 
-import * as React from 'react';
+import React from 'react';
 import { StyleSheet, View, Text, ImageBackground } from 'react-native';
 import { Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native'
@@ -47,7 +47,7 @@ const style = StyleSheet.create({
         width: 300,
         margin: 1,
         justifyContent: 'center',
-        marginBottom: -15
+        // marginBottom: -15
 
     },
 

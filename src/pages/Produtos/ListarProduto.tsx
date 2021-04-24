@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Alert, View, Text, FlatList, ScrollView, SafeAreaView, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import IconAntDesign from 'react-native-vector-icons/AntDesign'
-import IconEntypo from 'react-native-vector-icons/Entypo'
-
-import { Button } from 'react-native-elements'
+import { View, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { Searchbar, Card, Title, Paragraph } from 'react-native-paper'
-
-
 
 import firebase from '../../services/firebaseConection'
 
@@ -24,89 +18,74 @@ interface ProdutoProps {
 }
 
 export function ListarProduto() {
-    // if (firebase.auth().currentUser !== null) {
 
-    // } else {
-    //     navigation.navigate('login')
-    // }
     const navigation = useNavigation()
 
+    const [data, setData] = useState<[ProdutoProps]>([] as any)
+    const [filteredData, setFilteredData] = useState<[ProdutoProps]>()
+    const [pesquisa, setPesquisa] = useState<string>('');
 
-    const [data, setData] = useState<[]>([])
-
-    const [pesquisa, setPesquisa] = useState<string>('')
 
     const pesquisar = async (search: string) => {
         setPesquisa(search)
-        getProduct(search)
+        const filtrados = [] as any;
+        data.filter((produto) => {
+            if (produto.categoria == search) {
+                filtrados.push(produto)
+            }
+        })
+        await setFilteredData(filtrados)
+    };
+
+    const filtrar = async (search: string) => {
+        if (search === 'Todos' || '') {
+            return setFilteredData(data)
+        }
+        else {
+            const filtrados = [] as any;
+            data.filter((produto) => {
+                if (produto.categoria == search) {
+                    filtrados.push(produto)
+                }
+            })
+            await setFilteredData(filtrados)
+        }
     }
 
-    const getProduct = async (pesquisa: string) => {
-        const categoria = [] as any
-        let newData = [] as any
-        if (!pesquisa) {
-            await firebase.firestore().collection('produto')
-                .onSnapshot(
-                    querySnapshot => {
-                        const data = [] as any;
-                        querySnapshot.forEach(doc => {
-                            categoria.push(doc.data().categoria)
-                            data.push({
-                                ...doc.data(),
-                                id: doc.id
-                            })
-                        })
+    const getProduct = async () => {
+        const data = [] as any;
+        const categorias = ['Todos'] as any;
 
-                        categoria.filter(
-                            function (elem: object, index: number, self: any) {
-                                index === self.indexOf(elem)
-                                    ? newData.push(data[index])
-                                    : console.log('false')
-
-                            }
-                        )
-
-                        setData(newData)
-                    },
-                    error => {
-                        console.log(error)
-                    }
-                )
-        }
-
-        else {
-
-            await firebase.firestore().collection('produto')
-                .where('categoria', '==', pesquisa)
-                // .where()
-                .onSnapshot(querySnapshot => {
-                    const data = [] as any
+        await firebase.firestore().collection('produto')
+            .onSnapshot(
+                querySnapshot => {
                     querySnapshot.forEach(doc => {
-                        categoria.push(doc.data().categoria)
-
+                        // array de produtos
                         data.push({
                             ...doc.data(),
                             id: doc.id
                         })
+
+                        //para usar como filtro
+                        categorias.push(
+                            doc.data().categoria,
+                        )
                     })
 
-                    categoria.filter(
-                        function (elem: object, index: number, self: any) {
-
-                            index === self.indexOf(elem)
-                                ? newData.push(data[index])
-                                : console.log('false')
-                        }
-                    )
-
-                    setData(newData)
-                })
-        }
+                    setData(data)
+                    setFilteredData(data)
+                },
+                error => {
+                    console.log(error)
+                }
+            )
     }
 
     useEffect(() => {
-        getProduct('')
+        getProduct()
+
     }, [])
+
 
 
     const Item = ({ item }: { item: ProdutoProps }) => {
@@ -121,7 +100,7 @@ export function ListarProduto() {
             },
             title: { marginLeft: 5, fontSize: 18 },
             content: { width: '65%', marginLeft: 50 },
-            descricao: { marginLeft: 5, fontSize: 15 },
+            descricao: { marginLeft: 5, fontSize: 15, flex: 1 },
             preco: { marginTop: 25, color: 'red', fontWeight: 'bold' }
         })
 
@@ -130,18 +109,20 @@ export function ListarProduto() {
 
             <Card style={st.container}>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('PesquisarProduto', { categoria })}
+                    onPress={() => navigation.navigate('PesquisarProduto', { categoria, produtos: filteredData })}
                     style={{ margin: 10, padding: 10 }}>
 
                     <View style={{ flexDirection: 'row' }}>
-                        <View style={{ marginRight: 20 }}>
-                            <Image
-                                style={st.imagem}
-                                source={{ uri: imagem }}
-                            />
+                        <View style={{ marginRight: 20, }}>
+                            <View style={{ flexDirection: 'column', flex: 1 }}>
+                                <Image
+                                    style={st.imagem}
+                                    source={{ uri: imagem }}
+                                />
+                            </View>
                         </View>
-                        <View style={{ flexDirection: 'column' }}>
-                            <Title>{nome}</Title>
+                        <View style={{ flexDirection: 'column', flex: 1 }}>
+                            <Title>{categoria}</Title>
                             <Paragraph style={st.descricao}>Mais de 10 variedades de {categoria}</Paragraph>
                         </View>
                     </View>
@@ -162,7 +143,8 @@ export function ListarProduto() {
             />
 
             <FlatList
-                data={data}
+                showsVerticalScrollIndicator={false}
+                data={filteredData}
                 renderItem={Item}
                 keyExtractor={(item) => item.id}
             />

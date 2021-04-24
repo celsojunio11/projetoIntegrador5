@@ -1,50 +1,35 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native'
-import { ListItem, Button, Icon } from 'react-native-elements'
-import { Card, Title, Paragraph, TextInput } from 'react-native-paper'
-
+import { Button } from 'react-native-elements'
+import { Card, TextInput } from 'react-native-paper'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-
 import { useCart } from '../contexts/cart'
 import Header from '../components/Header'
-
-
+import { get } from '../lib/storage'
 import firebase from '../services/firebaseConection'
 import { useNavigation } from '@react-navigation/core'
-
+import { CardProdutoCarrinho } from '../components/CardProdutoCarrinho'
 
 interface ProdutoProps {
-    id: string,
+    id?: string, // ?opcional
     nome: string,
     descricao: string,
     imagem: string,
     preco: number,
-    categoria: string,
+    categoria?: string,
     quantidade: number,
 }
 
 export function Carrinho() {
 
-
     const navigation = useNavigation()
 
-    const { clear, add, remove, cart, totalValue, removeItem } = useCart()
-
-    if (cart.length === 0) {
-        return (
-            <View style={{ flex: 1 }}>
-                <Header navigation={navigation} isHome={true} title={'Carrinho'} />
-                <View style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
-                    <Text>Carrinho Vazio</Text>
-                </View>
-            </View>
-
-        )
-    }
+    const { add, remove, cart, totalValue, removeItem } = useCart()
 
     const [observacao, setObservacao] = useState<string>('')
     const [cardVisible, setCardVisible] = useState<boolean>(true)
     const [icon, setIcon] = useState('chevron-up-circle-outline')
+    const [idUsuario, setIdUsuario] = useState<string | null>()
 
     const trocaIcon = (icon: boolean) => {
         icon ? setIcon('chevron-up-circle-outline')
@@ -52,8 +37,13 @@ export function Carrinho() {
         setCardVisible(icon)
     }
 
+    const buscarUsuario = async () => {
+        const res = await get('idUsuario')
+        setIdUsuario(res)
+    }
+
     async function finalizar() {
-        let novoCarrinho = [] as any;
+        let novoCarrinho = [] as any[];
 
         const dataAtual = new Date() // para salvar como timestamp
 
@@ -63,7 +53,7 @@ export function Carrinho() {
         })
 
         const dados = {
-            idCliente: firebase.auth().currentUser.uid, // erro do ts lint
+            idCliente: idUsuario,
             data: dataAtual,
             itens: novoCarrinho,
             observacao: observacao,
@@ -76,96 +66,48 @@ export function Carrinho() {
             })
 
         Alert.alert('Pedido cadastrado com sucesso')
-
         navigation.navigate('Endereco', { idCliente: dados.idCliente })
     }
 
 
-    const Item = ({ item }: { item: ProdutoProps }) => {
-        const st = StyleSheet.create({
-            container: { borderRadius: 20, margin: 10 },
-            imagem: {
-                borderRadius: 50,
-                width: 100,
-                height: 100,
-            },
-            title: { marginLeft: 5, fontSize: 18 },
-            content: { width: '65%', marginLeft: 50 },
-            descricao: { marginLeft: 5, fontSize: 15 },
-            quantidade: { margin: 20, },
-            preco: { marginTop: 25, color: 'red', fontWeight: 'bold', }
-        })
-
-        const { id, nome, descricao, imagem, preco, categoria, quantidade } = item
-        let subtotal = preco * quantidade
-
-        return (
-
-            <Card style={st.container}>
-                <Card.Content>
-
-                    <View style={{ flexDirection: 'row' }}>
-                        <View style={{ marginRight: 20, flex: 1 }}>
-                            <Image
-                                style={st.imagem}
-                                source={{ uri: imagem }}
-                            />
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            <Title>{nome}</Title>
-                            <Paragraph style={st.descricao}>{descricao}</Paragraph>
-                            <Paragraph style={st.preco}> R$ {preco.toFixed(2).replace('.', ',')}</Paragraph>
-
-                            <View style={{ justifyContent: 'center', flexDirection: 'row', marginLeft: -50, marginTop: 10 }} >
-
-                                <TouchableOpacity onPress={() => { remove(item) }} >
-                                    <Ionicons name='remove-circle' size={30} color='#dc3545' />
-                                </TouchableOpacity>
-
-                                <Paragraph style={st.quantidade}>{quantidade}</Paragraph>
-
-                                <TouchableOpacity onPress={() => { add(item) }}>
-                                    <Ionicons name='add-circle' size={30} color='#198754' />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-
-                        <View>
-
-                            <TouchableOpacity>
-                                <Ionicons name='close-circle' size={30} color='#616161' onPress={() => { removeItem(item) }} />
-                            </TouchableOpacity>
-
-
-                        </View>
-
-                    </View>
-
-
-                    <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', marginTop: 15, }}>
-                        <Paragraph style={{ margin: 20, color: 'red' }}> R$ {subtotal.toFixed(2).replace('.', ',')}</Paragraph>
-                    </View>
-                </Card.Content>
-
-
-            </Card >
-        )
-    }
 
     const onChange = (txt: string) => {
         setObservacao(txt)
     }
 
-    return (
-        <View style={{ flex: 1 }}>
-            <Header navigation={navigation} isHome={true} title={'Carrinho'} />
+    useEffect(() => {
+        buscarUsuario()
+    }, [])
 
-            {/* <Button title="Limpar Carrinho" onPress={clear} /> */}
+    if (cart.length === 0) {
+        return (
+            <View style={{ flex: 1 }}>
+                <Header navigation={navigation} isHome={true} title={'Carrinho'} />
+                <View style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
+                    <Text style={{ fontSize: 25 }}>Carrinho Vazio</Text>
+                    <Text style={{ fontSize: 28 }}>{'😋'}</Text>
+                </View>
+            </View>
+
+        )
+    }
+
+    return (
+        <View style={{ flex: 1, }}>
+            <Header navigation={navigation} isHome={true} title={'Carrinho'} />
 
             <FlatList
                 data={cart}
-                renderItem={Item}
+                showsVerticalScrollIndicator={false}
                 keyExtractor={(data) => data.id}
+                renderItem={({ item }) => (
+                    <CardProdutoCarrinho
+                        renderItem={item}
+                        adicionar={() => add(item)}
+                        remover={() => remove(item)}
+                        deletar={() => removeItem(item)}
+                    />
+                )}
             />
 
             <Card style={{ margin: 10, paddingHorizontal: 10 }}>
@@ -206,7 +148,6 @@ export function Carrinho() {
 }
 
 const style = StyleSheet.create({
-
     input: {
         backgroundColor: 'white',
         textAlign: 'center',
@@ -216,8 +157,5 @@ const style = StyleSheet.create({
         borderWidth: 7,
         borderColor: 'transparent',
         height: 40,
-        // width: '100%'
     },
-
-
 })

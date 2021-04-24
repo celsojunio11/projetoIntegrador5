@@ -1,46 +1,54 @@
 import React from 'react';
-import { View, StyleSheet, Alert, AsyncStorage } from 'react-native';
-// import AsyncStorage from '@react-native-async-storage/async-storage'
+import { View, StyleSheet, Alert, Text } from 'react-native';
 import { Button } from 'react-native-elements';
 import { Formik, Field } from 'formik'
 import { useNavigation } from '@react-navigation/native'
 
 import CustomHeader from '../components/Header'
 import CustomInput from '../components/Input'
+
 import * as yup from 'yup'
 
+import { save } from '../lib/storage'
 
 import firebase from '../services/firebaseConection'
 
 interface UsuarioProps {
     senha: string,
     email: string,
-    // uid: string
 }
 
 
 export function Login() {
 
-    const usuario = firebase.auth().currentUser
     const navigation = useNavigation()
 
     const validationSchema = yup.object().shape({
 
         email: yup
             .string()
-            .email('Digite um email válido')
-            .required('O campo email é obrigatório'),
+            .email('Digite um email válido. 🙁')
+            .required('O campo email é obrigatório. 👆'),
         senha: yup
             .string()
-            .min(6, ({ min }) => `A senha deve ter pelo menos ${min} caracteres.`)
-            .required('O campo senha é obrigatório'),
+            .min(6, ({ min }) => `A senha deve ter pelo menos ${min} caracteres. 🙁`)
+            .required('O campo senha é obrigatório. 👆'),
     })
 
-  
-    const login = ({ email, senha }: UsuarioProps) => {
-        firebase.auth().signInWithEmailAndPassword(email, senha).then(() => {
+    const saveLocalStorage = async (nome: string, item: string) => {
+        try {
+            await save(nome, item)
+        } catch (error) {
+            Alert.alert('Não foi possivel salvar. 😢')
+            console.log(error)
+        }
 
-            // storeData({ email, senha } )
+    }
+
+    const login = ({ email, senha }: UsuarioProps) => {
+        firebase.auth().signInWithEmailAndPassword(email, senha).then(doc => {
+            const { uid }: any = doc.user
+            saveLocalStorage('idUsuario', uid)
             navigation.navigate('Logado');
         }).catch((err) => {
             Alert.alert(err);
@@ -52,8 +60,7 @@ export function Login() {
         <View style={{ flex: 1 }}>
             <CustomHeader isHome={false} navigation={navigation} title={'Login de Usuários'} />
 
-            <View style={{ flex: 1, justifyContent: 'center', backgroundColor: '#DCDCDC', }}>
-
+            <View style={{ flex: 1, justifyContent: 'center', backgroundColor: '#fff', }}>
                 <Formik validationSchema={validationSchema}
 
                     initialValues={{
@@ -102,13 +109,10 @@ const style = StyleSheet.create({
     button: {
         backgroundColor: 'red',
         borderRadius: 20,
-        // borderWidth: 7,
         borderColor: 'red',
-        width: 300,
         height: 45,
-        // margin: 100,
         marginTop: 20,
-        marginLeft: 30,
+        marginHorizontal: 30,
         justifyContent: 'center',
         marginBottom: 10,
 
@@ -121,16 +125,12 @@ const style = StyleSheet.create({
         color: '#0b2031',
         fontSize: 20,
         fontWeight: 'bold'
-
     },
 
     textCad: {
-
         color: '#0b2031',
         fontSize: 30,
         fontWeight: 'bold',
-
-
     },
 
 })

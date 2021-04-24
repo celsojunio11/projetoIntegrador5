@@ -49,9 +49,9 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderWidth: 10,
         borderColor: '#2089dc',
-        width: 300,
+        // width: 300,
         margin: 100,
-        marginLeft: 30,
+        marginHorizontal: 30,
         justifyContent: 'center',
         marginBottom: 5,
 

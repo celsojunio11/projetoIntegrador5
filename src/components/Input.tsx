@@ -24,13 +24,13 @@ function CustomInput(props: any) {
                         marginBottom: 30,
                     }}
                     name={icon} size={20} color='#0B2031' />
-                <TextInput mode='outlined'
+                <TextInput  mode='outlined'
                     error={hasError}
-                    selectionColor='#ff0'
-                    underlineColor='#ff0'
-                    style={[
-                        styles.textInput,
-                        hasError && styles.errorInput, { flex: 1 }
+                    selectionColor='#0B203166'
+                    underlineColor='#0B203166'
+                    style={ [{backgroundColor: 'green'},
+                        styles.textInput, 
+                        hasError && styles.errorInput, { flex: 1 ,backgroundColor: '#fff', borderRadius: 20}
                     ]}
 
                     value={value}

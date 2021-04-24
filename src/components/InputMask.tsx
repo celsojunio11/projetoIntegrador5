@@ -37,8 +37,8 @@ export default function CustomInput(props: any) {
                         />
                     }
                     error={hasError}
-                    selectionColor='#ff0'
-                    underlineColor='#ff0'
+                    selectionColor='#0B203166'
+                    underlineColor='#0B203166'
                     style={[
                         styles.textInput,
                         hasError && styles.errorInput, { flex: 1 }

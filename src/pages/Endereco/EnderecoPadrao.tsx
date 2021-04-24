@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { FlatList } from 'react-native'
 import { View, Text, Alert, } from 'react-native'
-import { Button, CheckBox } from 'react-native-elements'
-import { Card, Title, Paragraph, TextInput, Switch, } from 'react-native-paper'
+import { Button  } from 'react-native-elements'
+import { Card, Title,  Switch, } from 'react-native-paper'
 
 import { useCart } from '../../contexts/cart'
-import Header from '../../components/Header'
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Header from '../../components/Header' 
 
 import firebase from '../../services/firebaseConection'
 import { useNavigation } from '@react-navigation/native'
+import { get } from '../../lib/storage'
 
 interface EnderecoProps {
     cep: string,
@@ -25,18 +25,19 @@ interface EnderecoProps {
 export function EnderecoPadrao() {
     const navigation = useNavigation()
 
-    const idCliente = firebase.auth().currentUser.uid // erro do ts lint
-
     const { clear } = useCart()
 
     const [endereco, setEndereco] = useState<EnderecoProps>()
-    const [contador, setContador] = useState(0)
+    const [idUsuario, setIdUsuario] = useState()
+
 
     // const [enderecoEntrega, setEnderecoEntrega] = useState([])
 
+
+
     const getUsuario = async () => {
         try {
-            await firebase.firestore().collection('usuario').doc(idCliente).onSnapshot((onSnapshot) => {
+            await firebase.firestore().collection('usuario').doc(idUsuario).onSnapshot((onSnapshot) => {
                 const { endereco }: any = onSnapshot.data(); // pra pegar só o endereço
                 setEndereco(endereco)
             })
@@ -45,6 +46,10 @@ export function EnderecoPadrao() {
         }
     }
 
+    const buscarUsuario = async () => {
+        const res: string | null = await get('idUsuario')
+        setIdUsuario(res)
+    }
 
 
     const finalizar = () => {
@@ -54,7 +59,9 @@ export function EnderecoPadrao() {
     }
 
     useEffect(() => {
+        buscarUsuario()
         getUsuario()
+
     }, [])
 
 
@@ -99,7 +106,7 @@ export function EnderecoPadrao() {
         })
 
         firebase.firestore().collection('usuario')
-            .doc(idCliente).update({
+            .doc(idUsuario).update({
                 endereco: enderecoAtualizado
             })
 
@@ -146,7 +153,7 @@ export function EnderecoPadrao() {
             <Header navigation={navigation} title={'Finalizar'} />
 
             <FlatList
-                data={endereco} any
+                data={endereco}  
                 renderItem={Item}
                 keyExtractor={(item) => item.id}
             />

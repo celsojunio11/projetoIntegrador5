@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, Alert } from 'react-native';
-import { Button } from 'react-native-elements';
-import { TextInput } from 'react-native-paper';
+import { View, Text, ScrollView, StyleSheet, Alert } from 'react-native'
+import { Button } from 'react-native-elements'
+import { Formik, Field } from 'formik'
 import { useNavigation } from '@react-navigation/native'
 
-import { Formik, Field } from 'formik'
 import CustomHeader from '../components/Header'
 import CustomInput from '../components/Input'
 import CustomInputMask from '../components/InputMask'
-import TextInputMask from 'react-native-text-input-mask';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import axios from 'axios'
 import * as yup from 'yup'
 
 
-import axios from 'axios'
+
 
 import firebase from '../services/firebaseConection'
 
@@ -46,51 +44,51 @@ export function Cadastro() {
 
         nome: yup
             .string()
-            .required('O campo nome é obrigatório'),
+            .required('O campo nome é obrigatório.👆'),
 
         email: yup
             .string()
-            .email('Digite um email válido')
-            .required('O campo email é obrigatório'),
+            .email('Digite um email válido.🙁')
+            .required('O campo email é obrigatório.👆'),
 
         telefone: yup
             .string()
-            .min(9, ({ min }) => `O telefone deve ter pelo menos ${min} caracteres`)
-            .required('O campo telefone é obrigatório'),
+            .min(9, ({ min }) => `O telefone deve ter pelo menos ${min} caracteres.🙁`)
+            .required('O campo telefone é obrigatório.👆'),
 
         senha: yup
             .string()
-            .min(6, ({ min }) => `A senha deve ter pelo menos ${min} caracteres.`)
-            .required('O campo senha é obrigatório'),
+            .min(6, ({ min }) => `A senha deve ter pelo menos ${min} caracteres.🙁'`)
+            .required('O campo senha é obrigatório.👆'),
 
         logradouro: yup
             .string()
-            .required('O campo logradouro é obrigatório'),
+            .required('O campo logradouro é obrigatório.👆'),
 
         numero: yup
             .string()
-            .required('O campo numero é obrigatório'),
+            .required('O campo numero é obrigatório.👆'),
 
         // complemento: yup
         //     .string()
-        //     .required('O campo complemento é obrigatório'),
+        //     .required('O campo complemento é obrigatório.👆'),
 
         bairro: yup
             .string()
-            .required('O campo bairro é obrigatório'),
+            .required('O campo bairro é obrigatório.👆'),
 
         cidade: yup
             .string()
-            .required('O campo cidade é obrigatório'),
+            .required('O campo cidade é obrigatório.👆'),
 
         estado: yup
             .string()
-            .required('O campo estado é obrigatório')
-            .length(2, ({ length }) => `O estado deve ter ${length} caracteres.`),
+            .required('O campo estado é obrigatório.👆')
+            .length(2, ({ length }) => `O estado deve ter ${length} caracteres.🙁'`),
 
         cep: yup
             .string()
-            .required('O campo estado é obrigatório')
+            .required('O campo estado é obrigatório.👆')
         //  .length(9, ({ length }) => `O CEP deve ter ${length - 1} caracteres.`),
     })
 
@@ -99,7 +97,7 @@ export function Cadastro() {
     const buscarCep = async (value: string, setFieldValue: any) => {
         let cep = value.replace('-', '') // remover a formatação
         if (!cep.length || cep.length !== 8) {
-            Alert.alert('CEP inválido')
+            Alert.alert('CEP inválido. 🙁')
         } else {
             try {
                 const { data } = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
@@ -159,8 +157,10 @@ export function Cadastro() {
 
             <CustomHeader isHome={false} navigation={navigation} title={'Cadastro de Usuários'} />
 
-            <View style={{ flex: 1, justifyContent: 'center', backgroundColor: '#DCDCDC', }}>
-                <ScrollView>
+            <View style={{ flex: 1, justifyContent: 'center', backgroundColor: '#fff', }}>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                >
 
                     <Formik validationSchema={validationSchema}
 
@@ -315,12 +315,10 @@ const style = StyleSheet.create({
     button: {
         backgroundColor: 'red',
         borderRadius: 20,
-        // borderWidth: 7,
         borderColor: 'red',
-        width: 300,
         height: 45,
         margin: 50,
-        marginLeft: 30,
+        marginHorizontal: 30,
         justifyContent: 'center',
         marginBottom: 10,
 
@@ -331,9 +329,9 @@ const style = StyleSheet.create({
         borderRadius: 20,
         borderWidth: 7,
         borderColor: 'red',
-        width: 300,
+        width: '100%',
         marginTop: 20,
-        marginLeft: 30,
+        marginHorizontal: 30,
         justifyContent: 'center',
         marginBottom: 10,
 
@@ -359,12 +357,9 @@ const style = StyleSheet.create({
     },
 
     textCad: {
-
         color: 'white',
         fontSize: 10,
         fontWeight: 'bold',
-
-
     },
 
 })

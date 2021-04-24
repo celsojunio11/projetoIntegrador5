@@ -33,7 +33,7 @@ import { ListarProduto } from '../pages/Produtos/ListarProduto'
 import { PesquisarProduto } from '../pages/Produtos/PesquisarProduto'
 
 import { Notificacao } from '../pages/Notificacao'
-import Config from '../pages/Config'
+// import Config from '../pages/Config'
 
 // import { Mapa } from '../pages/Mapa'
 // import { Padaria } from '../pages/Padarias/Padaria'
@@ -114,7 +114,7 @@ function PadariaDrawer() {
                     <Drawer.Screen name="Carrinho" component={PadariaTab} />
                     <Drawer.Screen name="Produtos" component={ProdutoStack} />
                     <Drawer.Screen name="Notificacao" component={Notificacao} />
-                    <Drawer.Screen name="Config" component={Config} />
+                    {/* <Drawer.Screen name="Config" component={Config} /> */}
 
                     {/* <Drawer.Screen name="Detalhes" component={PadariaDetalhes} /> */}
                     {/* <Drawer.Screen name="Padaria" component={Padaria} /> */}
@@ -151,6 +151,7 @@ function PadariaTab() {
                     },
                 })}
                 tabBarOptions={{
+                    labelPosition: 'beside-icon',
                     activeTintColor: '#E22C43',
                     inactiveTintColor: 'gray',
                 }}
