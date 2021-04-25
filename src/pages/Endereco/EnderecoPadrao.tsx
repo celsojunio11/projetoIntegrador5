@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { FlatList } from 'react-native'
 import { View, Text, Alert, } from 'react-native'
-import { Button  } from 'react-native-elements'
-import { Card, Title,  Switch, } from 'react-native-paper'
+import { Button } from 'react-native-elements'
+import { Card, Title, Switch, } from 'react-native-paper'
 
-import { useCart } from '../../contexts/cart'
-import Header from '../../components/Header' 
+import { useCart } from '../../contexts/carrinhoContext'
+import { useAutenticacao } from '../../contexts/autenticacaoContext'
+import Header from '../../components/Header'
 
 import firebase from '../../services/firebaseConection'
 import { useNavigation } from '@react-navigation/native'
-import { get } from '../../lib/storage'
+import { CardEndereco } from '../../components/CardEndereco'
+
 
 interface EnderecoProps {
     cep: string,
@@ -25,43 +27,45 @@ interface EnderecoProps {
 export function EnderecoPadrao() {
     const navigation = useNavigation()
 
-    const { clear } = useCart()
+    const { limparCarrinho } = useCart()
+    const { usuario } = useAutenticacao()
 
-    const [endereco, setEndereco] = useState<EnderecoProps>()
-    const [idUsuario, setIdUsuario] = useState()
+    // const [endereco, setEndereco] = useState<EnderecoProps>()
 
+    const [enderecoFiltrado, setEnderecoFiltrado] = useState([])
 
-    // const [enderecoEntrega, setEnderecoEntrega] = useState([])
-
-
-
-    const getUsuario = async () => {
+    const getEnderecoUsuario = async () => {
         try {
-            await firebase.firestore().collection('usuario').doc(idUsuario).onSnapshot((onSnapshot) => {
+            await firebase.firestore().collection('usuario').doc(usuario).onSnapshot((onSnapshot) => {
+
                 const { endereco }: any = onSnapshot.data(); // pra pegar só o endereço
-                setEndereco(endereco)
+
+                setEnderecoFiltrado(endereco)
             })
         } catch (error) {
             console.log(error)
         }
     }
 
-    const buscarUsuario = async () => {
-        const res: string | null = await get('idUsuario')
-        setIdUsuario(res)
+
+    const atualizarEndereco = async (endereco: any) => {
+        await firebase.firestore().collection('usuario')
+            .doc(usuario).update({
+                endereco
+            })
     }
 
+    const finalizar = async () => {
 
-    const finalizar = () => {
+        await atualizarEndereco(enderecoFiltrado)
+
         Alert.alert('Salvo com sucesso')
-        clear()
-        navigation.navigate('Home')
+        limparCarrinho()
+        // navigation.navigate('Home')
     }
 
     useEffect(() => {
-        buscarUsuario()
-        getUsuario()
-
+        getEnderecoUsuario()
     }, [])
 
 
@@ -70,7 +74,7 @@ export function EnderecoPadrao() {
         // pra verificar se tem mais de um endereco de entrega
         let contador = 0
 
-        endereco.map((x: any, i: number) => {
+        enderecoFiltrado.map((x: any, i: number) => {
 
             let { entrega } = x
 
@@ -78,13 +82,10 @@ export function EnderecoPadrao() {
                 i !== index
                     ? //if
                     enderecoAtualizado.push(x)
-                    : // else
+                    :  // else
                     enderecoAtualizado.push({ ...x, entrega: !entrega })
             }
         })
-
-
-
 
         enderecoAtualizado.map((x: any) => {
 
@@ -105,11 +106,7 @@ export function EnderecoPadrao() {
 
         })
 
-        firebase.firestore().collection('usuario')
-            .doc(idUsuario).update({
-                endereco: enderecoAtualizado
-            })
-
+        setEnderecoFiltrado(enderecoAtualizado)
     }
 
 
@@ -140,10 +137,7 @@ export function EnderecoPadrao() {
                 {entrega ?
                     <Button title="Finalizar" buttonStyle={{ marginTop: 15 }} onPress={finalizar} />
                     : <View />
-
                 }
-
-
             </Card>
         )
     }
@@ -153,9 +147,10 @@ export function EnderecoPadrao() {
             <Header navigation={navigation} title={'Finalizar'} />
 
             <FlatList
-                data={endereco}  
-                renderItem={Item}
-                keyExtractor={(item) => item.id}
+                showsVerticalScrollIndicator={false}
+                data={enderecoFiltrado}
+                renderItem={({ item, index }: any) => (<CardEndereco renderItem={item} action={() => setCheck(index)} finalizar={() => finalizar()} />)}
+                keyExtractor={({ id }: any) => id}
             />
 
         </View>

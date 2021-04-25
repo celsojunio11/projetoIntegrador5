@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import { StyleSheet, View, Text, ImageBackground,Alert } from 'react-native';
+import { StyleSheet, View, Text, ImageBackground, Alert } from 'react-native';
 import { Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native'
 import apiLoginGoogle from '../../src/services/apiLoginGoogle';
@@ -51,9 +51,9 @@ export function Inicio() {
                     </View>
 
                     <View style={{ marginBottom: -30 }}>
-                    <Icon name='google' size={30} color='#4169E1'/>
+                        <Icon name='google' size={30} color='#4169E1' />
                     </View>
-                    
+
                 </View>
 
             </ImageBackground>
@@ -85,7 +85,7 @@ const style = StyleSheet.create({
         // margin: 100,
         marginTop: 100,
         marginLeft: 15,
-       
+
         justifyContent: 'center',
         marginBottom: 20,
     },

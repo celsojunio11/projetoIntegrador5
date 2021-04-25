@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { View, FlatList } from 'react-native'
 import { Searchbar, } from 'react-native-paper'
-import { useCart } from '../contexts/cart'
+import { useCart } from '../contexts/carrinhoContext'
 import Header from '../components/Header'
 import { CardProduto } from '../components/CardProduto'
 import { ButtonCard } from '../components/ButtonCard'
@@ -16,13 +16,14 @@ interface ProdutoProps {
     imagem: string,
     preco: number,
     categoria: string,
+    quantidade: number,
 }
 
 export function Main() {
 
     const navigation = useNavigation()
 
-    const { add } = useCart()
+    const { adicionar } = useCart()
 
     const [data, setData] = useState<[ProdutoProps]>([] as any)
     const [filteredData, setFilteredData] = useState<[ProdutoProps]>()
@@ -49,7 +50,7 @@ export function Main() {
         else {
             const filtrados = [] as any;
             data.filter((produto) => {
-                if (produto.categoria == search) {
+                if (produto.categoria == search || produto.descricao == search) {
                     filtrados.push(produto)
                 }
             })
@@ -122,7 +123,7 @@ export function Main() {
             <FlatList
                 showsVerticalScrollIndicator={false}
                 data={filteredData}
-                renderItem={({ item }) => (<CardProduto renderItem={item} action={() => add(item)} />)}
+                renderItem={({ item }) => (<CardProduto buttonTitle="Adicionar ao Carrinho" renderItem={item} action={() => adicionar(item)} />)}
                 keyExtractor={({ id }) => id}
             />
 

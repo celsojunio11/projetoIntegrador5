@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { View, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { Searchbar, Card, Title, Paragraph } from 'react-native-paper'
-
+import { get } from '../../lib/storage'
 import firebase from '../../services/firebaseConection'
 
 import CustomHeader from '../../components/Header'
 import { useNavigation } from '@react-navigation/core'
+import { CardCategoria } from '../../components/CardCategoria'
+import { Text } from 'react-native-elements'
 
 interface ProdutoProps {
     id: string,
@@ -30,27 +32,13 @@ export function ListarProduto() {
         setPesquisa(search)
         const filtrados = [] as any;
         data.filter((produto) => {
-            if (produto.categoria == search) {
+            if (produto.categoria == search || produto.descricao == search) {
                 filtrados.push(produto)
             }
         })
         await setFilteredData(filtrados)
     };
 
-    const filtrar = async (search: string) => {
-        if (search === 'Todos' || '') {
-            return setFilteredData(data)
-        }
-        else {
-            const filtrados = [] as any;
-            data.filter((produto) => {
-                if (produto.categoria == search) {
-                    filtrados.push(produto)
-                }
-            })
-            await setFilteredData(filtrados)
-        }
-    }
 
     const getProduct = async () => {
         const data = [] as any;
@@ -86,51 +74,6 @@ export function ListarProduto() {
 
     }, [])
 
-
-
-    const Item = ({ item }: { item: ProdutoProps }) => {
-
-
-        const st = StyleSheet.create({
-            container: { borderRadius: 20, margin: 10 },
-            imagem: {
-                borderRadius: 50,
-                width: 100,
-                height: 100,
-            },
-            title: { marginLeft: 5, fontSize: 18 },
-            content: { width: '65%', marginLeft: 50 },
-            descricao: { marginLeft: 5, fontSize: 15, flex: 1 },
-            preco: { marginTop: 25, color: 'red', fontWeight: 'bold' }
-        })
-
-        const { id, nome, descricao, imagem, preco, categoria } = item
-        return (
-
-            <Card style={st.container}>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('PesquisarProduto', { categoria, produtos: filteredData })}
-                    style={{ margin: 10, padding: 10 }}>
-
-                    <View style={{ flexDirection: 'row' }}>
-                        <View style={{ marginRight: 20, }}>
-                            <View style={{ flexDirection: 'column', flex: 1 }}>
-                                <Image
-                                    style={st.imagem}
-                                    source={{ uri: imagem }}
-                                />
-                            </View>
-                        </View>
-                        <View style={{ flexDirection: 'column', flex: 1 }}>
-                            <Title>{categoria}</Title>
-                            <Paragraph style={st.descricao}>Mais de 10 variedades de {categoria}</Paragraph>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-            </Card>
-        )
-    }
-
     return (
         <>
             <CustomHeader isHome={true} title={'Produtos'} navigation={navigation} />
@@ -145,8 +88,12 @@ export function ListarProduto() {
             <FlatList
                 showsVerticalScrollIndicator={false}
                 data={filteredData}
-                renderItem={Item}
                 keyExtractor={(item) => item.id}
+                renderItem={({ item, index }) => (
+                    <CardCategoria action={() => { navigation.navigate('PesquisarProduto', { categoria: item.categoria, produtos: filteredData }) }} renderItem={item} />
+                )}
+
+
             />
 
         </>

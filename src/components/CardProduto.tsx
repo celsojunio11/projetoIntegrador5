@@ -1,8 +1,7 @@
 import React from 'react'
-import { View, Image, StyleSheet, TouchableOpacity, Text } from 'react-native'
+import { View, Image, StyleSheet } from 'react-native'
 import { Button } from 'react-native-elements'
 import { Card, Title, Paragraph } from 'react-native-paper'
-import Ionicons from 'react-native-vector-icons/Ionicons'
 
 interface ProdutoProps {
     id: string,
@@ -15,23 +14,11 @@ interface ProdutoProps {
 
 interface CardProduto {
     renderItem: ProdutoProps,
-    action?: () => void
+    action?: () => void,
+    buttonTitle?: string
 }
-export function CardProduto({ renderItem, action }: CardProduto) {
+export function CardProduto({ renderItem, action, buttonTitle }: CardProduto) {
 
-    const st = StyleSheet.create({
-        container: { borderRadius: 20, margin: 10, paddingBottom: 10 },
-        imagem: {
-            borderRadius: 50,
-            width: 100,
-            height: 100,
-        },
-        title: { marginLeft: 5, marginBottom: 10, textTransform: 'capitalize', fontSize: 24 },
-        content: { width: '65%', marginLeft: 50 },
-        descricao: { marginLeft: 5, textTransform: 'capitalize', fontSize: 15 },
-        preco: { marginTop: 25, color: 'red', fontWeight: 'bold' },
-        button: { backgroundColor: "#E22C43", alignItems: 'flex-end', borderRadius: 20, padding: 10 }
-    })
 
     const { nome, descricao, imagem, preco, } = renderItem
 
@@ -54,10 +41,25 @@ export function CardProduto({ renderItem, action }: CardProduto) {
             </Card.Content>
             {action &&
                 <Card.Actions style={{ justifyContent: 'flex-end', marginTop: 10 }}>
-                    <Button buttonStyle={st.button} title="Adicionar ao Carrinho" onPress={action} />
+                    <Button buttonStyle={st.button} title={buttonTitle} onPress={action} />
                 </Card.Actions>
             }
 
         </Card>
     )
 }
+
+
+const st = StyleSheet.create({
+    container: { borderRadius: 20, margin: 10, paddingBottom: 10 },
+    imagem: {
+        borderRadius: 50,
+        width: 100,
+        height: 100,
+    },
+    title: { marginLeft: 5, marginBottom: 10, textTransform: 'capitalize', fontSize: 24 },
+    content: { width: '65%', marginLeft: 50 },
+    descricao: { marginLeft: 5, textTransform: 'capitalize', fontSize: 15 },
+    preco: { marginTop: 25, color: 'red', fontWeight: 'bold' },
+    button: { backgroundColor: "#E22C43", alignItems: 'flex-end', borderRadius: 20, padding: 10 }
+})

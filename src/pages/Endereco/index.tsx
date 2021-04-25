@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, FlatList, TouchableOpacity, ScrollView, StyleSheet } from 'react-native'
 import { Card, ListItem, Button, Icon } from 'react-native-elements'
-import { useCart } from '../../contexts/cart'
+import { useCart } from '../../contexts/carrinhoContext'
 import Header from '../../components/Header'
 import { useNavigation } from '@react-navigation/native'
 

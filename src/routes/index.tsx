@@ -41,18 +41,19 @@ import { Notificacao } from '../pages/Notificacao'
 
 
 // importacao context
-import CartProvider, { useCart } from '../contexts/cart'
+import { CarrinhoProvider, useCart } from '../contexts/carrinhoContext'
 import { Avatar, Badge, Icon, withBadge } from 'react-native-elements'
 // importacao das páginas
 
 // importacao do drawer personalizado
 import CustomDrawer from '../components/Drawer'
 import CustomTabBar from '../components/TabBar'
+import { AutenticacaoProvider } from '../contexts/autenticacaoContext';
 
 function IconWithBadge(focused: any) {
     const { color, size, focused: focus } = focused
 
-    const { cart } = useCart();
+    const { carrinho } = useCart();
 
     return (
         <View style={{ height: 24, width: 24, margin: 5, alignContent: 'center', justifyContent: 'center' }}>
@@ -63,10 +64,10 @@ function IconWithBadge(focused: any) {
                 <Ionicons name={'cart-outline'} size={size} color={color} />
             }
 
-            {cart.length != 0 &&
+            {carrinho.length != 0 &&
                 <Badge
                     containerStyle={{ position: 'absolute', top: -4, right: -9 }}
-                    value={Object.keys(cart).length} status="primary"
+                    value={Object.keys(carrinho).length} status="primary"
                 />
             }
 
@@ -105,33 +106,34 @@ function ProdutoStack() {
 
 function PadariaDrawer() {
     return (
-
-        <CartProvider>
-            <PaperProvider>
-                <Drawer.Navigator>
-                    {/* drawerContent={(props) => CustomDrawer(props)}> */}
-
-                    <Drawer.Screen name="Carrinho" component={PadariaTab} />
-                    <Drawer.Screen name="Produtos" component={ProdutoStack} />
-                    <Drawer.Screen name="Notificacao" component={Notificacao} />
-                    {/* <Drawer.Screen name="Config" component={Config} /> */}
-
-                    {/* <Drawer.Screen name="Detalhes" component={PadariaDetalhes} /> */}
-                    {/* <Drawer.Screen name="Padaria" component={Padaria} /> */}
-                    {/* <Drawer.Screen name="Mapa" component={Mapa} /> */}
-                    <Drawer.Screen name="Sair" component={AutenticacaoStack} />
+        <AutenticacaoProvider>
 
 
-                </Drawer.Navigator>
-            </PaperProvider>
-        </CartProvider>
+            <CarrinhoProvider>
+                <PaperProvider>
+                    <Drawer.Navigator>
+                        {/* drawerContent={(props) => CustomDrawer(props)}> */}
 
+                        <Drawer.Screen name="Carrinho" component={PadariaTab} />
+                        <Drawer.Screen name="Produtos" component={ProdutoStack} />
+                        <Drawer.Screen name="Notificacao" component={Notificacao} />
+                        {/* <Drawer.Screen name="Config" component={Config} /> */}
+
+                        {/* <Drawer.Screen name="Detalhes" component={PadariaDetalhes} /> */}
+                        {/* <Drawer.Screen name="Padaria" component={Padaria} /> */}
+                        {/* <Drawer.Screen name="Mapa" component={Mapa} /> */}
+                        <Drawer.Screen name="Sair" component={AutenticacaoStack} />
+
+                    </Drawer.Navigator>
+                </PaperProvider>
+            </CarrinhoProvider>
+        </AutenticacaoProvider>
     )
 }
 
 function PadariaTab() {
     return (
-        <CartProvider>
+        <CarrinhoProvider>
             <Tab.Navigator
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused, color, size }) => {
@@ -160,7 +162,7 @@ function PadariaTab() {
                 <Tab.Screen name="Home" component={Main} />
                 <Tab.Screen name="Carrinho" component={CarrinhoStack} options={{ tabBarIcon: IconWithBadge }} />
             </Tab.Navigator>
-        </CartProvider>
+        </CarrinhoProvider>
     )
 }
 

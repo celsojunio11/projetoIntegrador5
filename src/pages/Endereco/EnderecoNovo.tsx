@@ -6,7 +6,7 @@ import { Formik, Field } from 'formik'
 import CustomHeader from '../../components/Header'
 import CustomInput from '../../components/Input'
 import CustomInputMask from '../../components/InputMask'
-import { useCart } from '../../contexts/cart'
+import { useCart } from '../../contexts/carrinhoContext'
 
 import * as yup from 'yup'
 // import style from './styles'
@@ -14,6 +14,7 @@ import axios from 'axios'
 
 import firebase from '../../services/firebaseConection'
 import { useNavigation } from '@react-navigation/native';
+import { useAutenticacao } from '../../contexts/autenticacaoContext';
 
 interface EnderecoProps {
     cep: string,
@@ -30,6 +31,8 @@ interface EnderecoProps {
 
 export function EnderecoNovo() {
     const navigation = useNavigation()
+    const { usuario } = useAutenticacao()
+
 
     const validationSchema = yup.object().shape({
 
@@ -59,6 +62,7 @@ export function EnderecoNovo() {
         //     .length(9, ({ length }) => `O CEP deve ter ${length - 1 } caracteres.`),
     })
 
+    const { limparCarrinho } = useCart()
 
     const buscarCep = async (value: string, setFieldValue: any) => {
         let cep = value.replace('-', '') // remover a formatação
@@ -80,14 +84,12 @@ export function EnderecoNovo() {
 
     }
 
-    const { clear } = useCart()
-
 
     const atualizar = async (values: EnderecoProps) => {
         try {
-            const usuarioId = firebase.auth().currentUser.uid // erro do ts lint
+
             const { logradouro, numero, complemento, bairro, cidade, estado } = values
-            await firebase.firestore().collection('usuario').doc(usuarioId).update({
+            await firebase.firestore().collection('usuario').doc(usuario).update({
 
                 // para adicionar novo endereco no array
                 endereco: firebase.firestore.FieldValue.arrayUnion({
@@ -101,7 +103,7 @@ export function EnderecoNovo() {
                 })
             }).then(() => {
                 Alert.alert('Cadastrado com sucesso')
-                clear()
+                limparCarrinho()
                 navigation.navigate('Home')
             }).catch((err) => {
                 Alert.alert(err)

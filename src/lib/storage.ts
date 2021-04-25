@@ -17,3 +17,21 @@ export async function get(key: string) {
         throw new Error(error)
     }
 }
+
+// export async function saveJson(value: any) {
+//     try {
+
+
+//         const newProduto = await AsyncStorage.getItem('@appDelivery:produtosFavoritos')
+
+//         const oldProdutos = newProduto ? JSON.parse(String(newProduto)) : {}
+
+//         const data = [oldProdutos, newProduto] as any
+
+//         await AsyncStorage.setItem('@appDelivery:produtosFavoritos', JSON.stringify(data))
+
+
+//     } catch (error) {
+//         throw new Error(error)
+//     }
+// }

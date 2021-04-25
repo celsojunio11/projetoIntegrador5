@@ -6,18 +6,17 @@ import CustomHeader from '../components/Header';
 import firebase from '../services/firebaseConection';
 import { TextInput } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native';
+import { useAutenticacao } from '../contexts/autenticacaoContext';
 
 
 export default function Config() {
-    const usuarioAtual = firebase.auth().currentUser.uid
+    const { usuario } = useAutenticacao()
 
-    
-    
     const navigation = useNavigation()
     // const [usuario, setUsuario] = useState({})
 
     const getUsuarioLogado = async () => {
-        await firebase.firestore().collection('usuario').doc(usuarioAtual).onSnapshot((querySnapshot) => {
+        await firebase.firestore().collection('usuario').doc(usuario).onSnapshot((querySnapshot) => {
             const usuario = querySnapshot.data()
 
             if (usuario?.nome != null) {
@@ -128,7 +127,7 @@ export default function Config() {
 
     const atualizarCadastro = async () => {
 
-        await firebase.firestore().collection('usuario').doc(usuarioAtual).set({
+        await firebase.firestore().collection('usuario').doc(usuario).set({
             nome: nome,
             email: email,
             telefone: ddd + telefone,
