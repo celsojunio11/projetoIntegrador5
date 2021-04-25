@@ -4,12 +4,14 @@ import { Button } from 'react-native-elements';
 import { Formik, Field } from 'formik'
 import { useNavigation } from '@react-navigation/native'
 
+
 import CustomHeader from '../components/Header'
 import CustomInput from '../components/Input'
 
 import * as yup from 'yup'
 
 import { save } from '../lib/storage'
+
 
 import firebase from '../services/firebaseConection'
 
@@ -35,6 +37,7 @@ export function Login() {
             .required('O campo senha é obrigatório. 👆'),
     })
 
+
     const saveLocalStorage = async (nome: string, item: string) => {
         try {
             await save(nome, item)
@@ -42,6 +45,12 @@ export function Login() {
             Alert.alert('Não foi possivel salvar. 😢')
             console.log(error)
         }
+    }
+
+
+    const xxxxxx = ({ email, senha }: UsuarioProps) => { /// mudar o nome
+        firebase.auth().signInWithEmailAndPassword(email, senha)
+
 
     }
 
@@ -95,6 +104,8 @@ export function Login() {
                                 title='Login'
                                 disabled={!isValid}
                             />
+
+
                         </>
                     )}
                 </Formik>
