@@ -3,6 +3,7 @@ import { View, StyleSheet, Alert, Text } from 'react-native';
 import { Button } from 'react-native-elements';
 import { Formik, Field } from 'formik'
 import { useNavigation } from '@react-navigation/native'
+const iconPao = require('../assets/paes-icon.png')
 
 
 import CustomHeader from '../components/Header'
@@ -14,6 +15,8 @@ import { save } from '../lib/storage'
 
 
 import firebase from '../services/firebaseConection'
+import { Image } from 'react-native-elements/dist/image/Image';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 interface UsuarioProps {
     senha: string,
@@ -70,6 +73,11 @@ export function Login() {
             <CustomHeader isHome={false} navigation={navigation} title={'Login de Usuários'} />
 
             <View style={{ flex: 1, justifyContent: 'center', backgroundColor: '#fff', }}>
+
+                <TouchableOpacity style={{ marginBottom: 25, justifyContent: 'center', alignItems: 'center'}}>
+                    <Image style={{ width: 100, height: 100, }} source={iconPao} />
+                </TouchableOpacity>
+
                 <Formik validationSchema={validationSchema}
 
                     initialValues={{

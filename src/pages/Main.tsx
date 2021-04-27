@@ -97,7 +97,7 @@ export function Main() {
 
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+        <View style={{ flex: 1, backgroundColor: '#f0f0f0' }}>
             <Header navigation={navigation} isHome={true} title='Menu Principal' />
 
             <Searchbar

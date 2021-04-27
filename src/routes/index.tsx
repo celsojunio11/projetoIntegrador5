@@ -22,7 +22,6 @@ import { Login } from '../pages/Login';
 // Carrinho
 import { Carrinho } from '../pages/Carrinho';
 import { Main } from '../pages/Main'
-import { Finalizar } from '../pages/Finalizar'
 import { Endereco } from '../pages/Endereco'
 
 import { EnderecoNovo } from '../pages/Endereco/EnderecoNovo'
@@ -37,7 +36,7 @@ import { Notificacao } from '../pages/Notificacao'
 
 // import { Mapa } from '../pages/Mapa'
 // import { Padaria } from '../pages/Padarias/Padaria'
-// import { PadariaDetalhes } from '../pages/Padarias/PadariaDetalhes'
+import { PadariaDetalhes } from '../pages/Padarias/PadariaDetalhes'
 
 
 // importacao context
@@ -116,10 +115,10 @@ function PadariaDrawer() {
 
                         <Drawer.Screen name="Carrinho" component={PadariaTab} />
                         <Drawer.Screen name="Produtos" component={ProdutoStack} />
-                        <Drawer.Screen name="Notificacao" component={Notificacao} />
+                        {/* <Drawer.Screen name="Notificacao" component={Notificacao} /> */}
                         {/* <Drawer.Screen name="Config" component={Config} /> */}
 
-                        {/* <Drawer.Screen name="Detalhes" component={PadariaDetalhes} /> */}
+                        <Drawer.Screen name="Detalhes" component={PadariaDetalhes} />
                         {/* <Drawer.Screen name="Padaria" component={Padaria} /> */}
                         {/* <Drawer.Screen name="Mapa" component={Mapa} /> */}
                         <Drawer.Screen name="Sair" component={AutenticacaoStack} />

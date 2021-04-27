@@ -205,6 +205,7 @@ export function Cadastro() {
                                     placeholder='Telefone'
                                     label='Telefone'
                                     keyboardType='numeric'
+                                    action={() => { }}
                                 />
 
                                 <Field

@@ -1,19 +1,15 @@
-import firebase from 'firebase/app';
-import 'firebase/firebase-auth';
-import 'firebase/firebase-firestore';
+// import firebase from 'firebase/app';
+// import 'firebase/firebase-auth';
+// import 'firebase/firebase-firestore';
 
-import firebaseConection from '../services/firebaseConection';
+// // import firebaseConection from '../services/firebaseConection';
 
-const firebaseApp = firebase.initializeApp(firebaseConection);
-const db = firebaseApp.firestore();
+// // const firebaseApp = firebase.initializeApp(firebaseConection);
+// // const db = firebaseApp.firestore();
 
-export default{
+// export async function googleLogar() {
 
-  googleLogar: async() =>{
-
-    const provider = new firebase.auth.GoogleAuthProvider();
-    let result = await firebase.auth().signInWithPopup(provider);
-    return result;
-  }
-
-}
+//   const provider = new firebase.auth.GoogleAuthProvider();
+//   let result = await firebase.auth().signInWithPopup(provider);
+//   return result;
+// }

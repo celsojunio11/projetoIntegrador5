@@ -16,9 +16,15 @@ const firebaseConfig = {
 
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig)
-    firebase.firestore().settings({ experimentalForceLongPolling: true });  
+    firebase.firestore().settings({ experimentalForceLongPolling: true });
 
 }
 
+// export async function googleLogar() {
+
+//     const provider = new firebase.auth.GoogleAuthProvider();
+//     let result = await firebase.auth().signInWithPopup(provider);
+//     return result;
+// }
 
 export default firebase;

@@ -58,7 +58,7 @@ export function Carrinho() {
             })
 
         Alert.alert('Pedido cadastrado com sucesso')
-        navigation.navigate('Endereco', { idCliente: dados.idCliente })
+        navigation.navigate('EnderecoPadrao', { idCliente: dados.idCliente })
     }
 
 
@@ -126,7 +126,7 @@ export function Carrinho() {
                                     onChangeText={(txt) => onChange(txt)}
                                 />
                                 {/* button: {marginTop: 15, backgroundColor: "#E22C43", alignItems: 'flex-end' } */}
-                                <Button title="Dados para entrega" buttonStyle={{ marginTop: 5, borderRadius: 20, padding: 10 }} onPress={() => finalizar()} />
+                                <Button title="Dados para entrega" buttonStyle={{ marginTop: 15, borderRadius: 20, padding: 10 }} onPress={() => finalizar()} />
                             </View>
                     }
                 </View>

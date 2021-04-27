@@ -14,13 +14,13 @@ export function Endereco() {
             <Header navigation={navigation} title={'Endereço de Entrega'} />
 
 
-            <ScrollView>
+            <View style={styles.containerInsert}>
 
                 <Button title="Endereço Padrão" buttonStyle={styles.button} onPress={() => navigation.navigate('EnderecoPadrao')} />
 
                 <Button title="Cadastrar novo endereço" buttonStyle={styles.button} onPress={() => navigation.navigate('EnderecoNovo')} />
 
-            </ScrollView>
+            </View>
 
 
         </View>
@@ -32,7 +32,10 @@ export function Endereco() {
 
 const styles = StyleSheet.create({
     containerInsert: {
-        //padding: 5,
+        flex: 1,
+        // width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: "#DDD"
     },
     input: {
@@ -45,15 +48,22 @@ const styles = StyleSheet.create({
         borderColor: "#0B2031",
     },
     button: {
-        backgroundColor: '#2089dc',
-        borderRadius: 5,
-        borderWidth: 10,
+        // backgroundColor: '#2089dc',
+        // borderRadius: 5,
+        // borderWidth: 10,
         borderColor: '#2089dc',
-        // width: 300,
-        margin: 100,
+        width: 300,
+        // margin: 100,
+        padding: 10,
+        height: 50,
+        // width: '100%',
         marginHorizontal: 30,
         justifyContent: 'center',
         marginBottom: 5,
+        backgroundColor: "#2089dc",
+
+        borderRadius: 20,
+        //  padding: 10
 
     },
 

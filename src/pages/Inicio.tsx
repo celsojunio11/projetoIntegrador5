@@ -3,25 +3,10 @@ import * as React from 'react';
 import { StyleSheet, View, Text, ImageBackground, Alert } from 'react-native';
 import { Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native'
-import apiLoginGoogle from '../../src/services/apiLoginGoogle';
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { useState } from 'react';
-
 const imagemFundo = require('../assets/imagemFundo/fundo.jpeg')
 
 export function Inicio() {
-
-
-    /*const actionLoginGoogle = async () => {
-        let result = apiLoginGoogle.googleLogar();
-
-        if(result){
-
-        }else{
-            Alert.alert('Erro login Google');
-        }
-    }*/
-
     const navigation = useNavigation()
 
     return (
@@ -31,34 +16,24 @@ export function Inicio() {
                 style={style.image}
             >
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-             
+
                     <View style={{ marginBottom: 10 }}>
                         <Text style={style.text}>Padaria </Text>
                         <Text style={style.text}>Delivery</Text>
-                        
+
                     </View>
-                    <View style={{ margin:40}}>
-                    <Icon name='coffee' size={60} color='#ffffff' />
+                    <View style={{ margin: 40 }}>
+                        <Icon name='coffee' size={60} color='#ffffff' />
                     </View>
 
                     <View style={{ marginBottom: 1 }}>
-                    
+
                         <Button buttonStyle={style.button} title="Entrar com email" onPress={() => navigation.navigate('Login')} />
                     </View>
 
                     <View style={{ marginBottom: -40 }}>
                         <Button buttonStyle={style.buttonCadastro} title="Criar conta gratuita" onPress={() => navigation.navigate('Cadastro')} />
                     </View>
-
-                    <View style={{ marginBottom: -30 }}>
-                        <Button buttonStyle={style.buttonGoogle} title="Fazer login com Google" /*onPress={actionLoginGoogle} *//>
-                        
-                    </View>
-
-                    <View style={{ marginBottom: -30 }}>
-                        <Icon name='google' size={30} color='green' />
-                    </View>
-
                 </View>
 
             </ImageBackground>

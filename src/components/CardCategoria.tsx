@@ -15,10 +15,10 @@ interface ProdutoProps {
 }
 
 
-export function CardCategoria({ renderItem, action }: { renderItem: any, action: () => void }) {
+export function CardCategoria({ renderItem, action, quantidade }: { renderItem: any, action: () => void, quantidade: number }) {
 
     const { id, nome, descricao, imagem, preco, categoria } = renderItem
-
+ 
     return (
         <Card style={st.container}>
             <TouchableOpacity
@@ -36,7 +36,13 @@ export function CardCategoria({ renderItem, action }: { renderItem: any, action:
                     </View>
                     <View style={{ flexDirection: 'column', flex: 1 }}>
                         <Title>{categoria}</Title>
-                        <Paragraph style={st.descricao}>Mais de 10 variedades de {categoria}</Paragraph>
+                        {quantidade > 2 ?
+                            <Paragraph style={st.descricao}>Veja nossas variedades de {categoria}</Paragraph>
+                            :
+                            <Paragraph style={st.descricao}>Mais de {quantidade} variedades de {categoria}</Paragraph>
+
+                        }
+
                     </View>
                 </View>
             </TouchableOpacity>
