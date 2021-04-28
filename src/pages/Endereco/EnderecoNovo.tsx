@@ -122,8 +122,8 @@ export function EnderecoNovo() {
             <CustomHeader navigation={navigation} title={'Novo Endereço'} />
 
 
-            <View style={{ flex: 1, justifyContent: 'center', backgroundColor: '#DCDCDC', }}>
-                <ScrollView>
+            <View style={{ flex: 1, justifyContent: 'center', backgroundColor: '#f0f0f0', }}>
+                <ScrollView showsVerticalScrollIndicator={false}    >
 
                     <Formik validationSchema={validationSchema}
 
@@ -210,7 +210,9 @@ export function EnderecoNovo() {
                                     />
                                 </View>
 
-                                <Button buttonStyle={{ marginTop: 15 }}
+
+                                <Button
+                                    buttonStyle={{ margin: 20, borderRadius: 20, padding: 10, marginBottom: 20 }}
                                     onPress={handleSubmit}
                                     title='Finalizar'
                                     disabled={!isValid}

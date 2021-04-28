@@ -116,7 +116,7 @@ export function EnderecoPadrao() {
         return (
             <Card style={{ flex: 1, justifyContent: 'center', alignContent: 'center', margin: 10, padding: 20 }}>
 
-                {entrega ? <Title>Endereco Atual de Entrega</Title>
+                {entrega ? <Title>Endereco de Entrega</Title>
                     : <View />
                 }
                 <Text>{logradouro} nº {numero}, {complemento}</Text>
@@ -143,7 +143,7 @@ export function EnderecoPadrao() {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: '#f0f0f0'}}>
             <Header navigation={navigation} title={'Finalizar'} />
 
             <FlatList
@@ -152,6 +152,8 @@ export function EnderecoPadrao() {
                 renderItem={({ item, index }: any) => (<CardEndereco renderItem={item} action={() => setCheck(index)} finalizar={() => finalizar()} />)}
                 keyExtractor={({ id }: any) => id}
             />
+
+            <Button title="Cadastrar Novo Endereço" buttonStyle={{  margin : 20,marginTop: 15, borderRadius: 20, padding: 10 }} onPress={() => navigation.navigate('EnderecoNovo')} />
 
         </View>
 

@@ -27,7 +27,6 @@ export function ListarProduto() {
     const [filteredData, setFilteredData] = useState<[ProdutoProps]>()
     const [pesquisa, setPesquisa] = useState<string>('');
 
-
     const pesquisar = async (search: string) => {
         setPesquisa(search)
         const filtrados = [] as any;
@@ -39,6 +38,14 @@ export function ListarProduto() {
         await setFilteredData(filtrados)
     };
 
+    const quantidadePorCategoria = async (categoria: string) => {
+        // console.log(categoria == pesquisa)
+
+        // filteredData?.map((prod =>
+        //     console.log(prod.categoria == categoria)
+        // ))
+    }
+    quantidadePorCategoria('Todos')
 
     const getProduct = async () => {
         const data = [] as any;
@@ -100,7 +107,7 @@ export function ListarProduto() {
                 data={filteredData}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item, index }) => (
-                    <CardCategoria action={() => { navigation.navigate('PesquisarProduto', { categoria: item.categoria, produtos: filteredData }) }} renderItem={item} />
+                    <CardCategoria quantidade={8} action={() => { navigation.navigate('PesquisarProduto', { categoria: item.categoria, produtos: filteredData }) }} renderItem={item} />
                 )}
 
 

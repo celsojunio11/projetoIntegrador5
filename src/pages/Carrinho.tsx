@@ -119,6 +119,9 @@ export function Carrinho() {
                 )}
             />
 
+
+
+
             <Portal>
                 <Modal visible={visible} onDismiss={visibilidadeModal} contentContainerStyle={style.input}>
                     <View style={{ height: 50, marginLeft: 20, marginTop: 40 }}>
@@ -138,8 +141,8 @@ export function Carrinho() {
                         />
                         <Paragraph style={{ marginBottom: 20, fontSize: 15 }}>Selecione a forma de pagamento</Paragraph>
                         {/* <View style={{ }}> */}
-                        <View style={{ margin: 10, flexDirection: 'row'}}>
-                            <Chip  selected={selectFormaPagamento} selectedColor='#0b2031' style={{ marginHorizontal: 10 }} icon='information' onPress={() => onChangeFormaPagamento('Dinheiro')}>Dinheiro</Chip>
+                        <View style={{ margin: 10, flexDirection: 'row' }}>
+                            <Chip selected={selectFormaPagamento} selectedColor='#0b2031' style={{ marginHorizontal: 10 }} icon='information' onPress={() => onChangeFormaPagamento('Dinheiro')}>Dinheiro</Chip>
                             <Chip selected={!selectFormaPagamento} style={{ marginHorizontal: 10 }} icon='information' onPress={() => onChangeFormaPagamento('Cartão')}>Cartão</Chip>
                         </View>
                         <Button title='Finalizar' buttonStyle={{ marginTop: 10, borderRadius: 20, padding: 10, paddingHorizontal: 10 }} onPress={finalizar} />
@@ -149,6 +152,7 @@ export function Carrinho() {
                 </Modal>
             </Portal>
             <Button title='Dados para entrega' buttonStyle={{ margin: 10, borderRadius: 20, padding: 10, paddingHorizontal: 10 }} onPress={visibilidadeModal} />
+
         </View >
     )
 }
