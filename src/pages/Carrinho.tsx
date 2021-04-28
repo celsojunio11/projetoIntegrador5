@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import { Button } from 'react-native-elements'
-import { Card, TextInput } from 'react-native-paper'
+import { Modal, Portal, Card, TextInput, Chip, Paragraph } from 'react-native-paper'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useCart } from '../contexts/carrinhoContext'
 import Header from '../components/Header'
@@ -14,6 +14,7 @@ interface ProdutoProps {
     id?: string, // ?opcional
     nome: string,
     quantidade: number,
+    preco: number,
 }
 
 export function Carrinho() {
@@ -23,15 +24,37 @@ export function Carrinho() {
     const { adicionar, remover, carrinho, total, removerItem } = useCart()
 
     const [observacao, setObservacao] = useState<string>('')
-    const [cardVisible, setCardVisible] = useState<boolean>(true)
-    const [icon, setIcon] = useState('chevron-up-circle-outline')
+    const [formaPagamento, setFormaPagamento] = useState<string>('')
 
-    const trocaIcon = (icon: boolean) => {
-        icon ? setIcon('chevron-up-circle-outline')
-            : setIcon('chevron-down-circle-outline')
-        setCardVisible(icon)
+    const [selectFormaPagamento, setSelectFormaPagamento] = useState<boolean>(true)
+    const [visible, setVisibilidadeModal] = useState<boolean>(false);
+    // const [icon, setIcon] = useState('chevron-up-circle-outline')
+
+    // const trocaIcon = (icon: boolean) => {
+    //     icon ? setIcon('chevron-up-circle-outline')
+    //         : setIcon('chevron-down-circle-outline')
+    //     setCardVisible(icon)
+    // }
+
+    const selecionarformaPagamento = () => {
+        setSelectFormaPagamento(!visible)
     }
 
+
+    const visibilidadeModal = () => {
+        setVisibilidadeModal(!visible)
+    }
+
+
+    const onChangeFormaPagamento = (txt: string) => {
+        setFormaPagamento(txt)
+        setSelectFormaPagamento(!selectFormaPagamento)
+
+    }
+
+    const onChange = (txt: string) => {
+        setObservacao(txt)
+    }
 
 
     async function finalizar() {
@@ -41,7 +64,7 @@ export function Carrinho() {
 
         carrinho.map((x: any) => {
             novoCarrinho.push(
-                { nome: x.nome, quantidade: x.quantidade }) // pra pegar só nome e quantidade
+                { nome: x.nome, quantidade: x.quantidade, preco: x.preco }) // pra pegar só nome e quantidade
         })
 
         const dados = {
@@ -49,6 +72,7 @@ export function Carrinho() {
             data: dataAtual,
             itens: novoCarrinho,
             observacao: observacao,
+            formaPagamento: formaPagamento,
             finalizado: false
         }
 
@@ -57,14 +81,10 @@ export function Carrinho() {
                 Alert.alert(err)
             })
 
+        setVisibilidadeModal(false)
+
         Alert.alert('Pedido cadastrado com sucesso')
-        navigation.navigate('Endereco', { idCliente: dados.idCliente })
-    }
-
-
-
-    const onChange = (txt: string) => {
-        setObservacao(txt)
+        navigation.navigate('EnderecoPadrao', { idCliente: dados.idCliente })
     }
 
 
@@ -72,7 +92,7 @@ export function Carrinho() {
         return (
             <View style={{ flex: 1 }}>
                 <Header navigation={navigation} isHome={true} title={'Carrinho'} />
-                <View style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <Text style={{ fontSize: 25 }}>Carrinho Vazio</Text>
                     <Text style={{ fontSize: 28 }}>{'😋'}</Text>
                 </View>
@@ -99,40 +119,36 @@ export function Carrinho() {
                 )}
             />
 
-            <Card style={{ margin: 10, paddingHorizontal: 10 }}>
-                <TouchableOpacity onPress={() => trocaIcon(!cardVisible)}
-                    style={{ justifyContent: 'flex-end', alignItems: 'flex-end', marginTop: 15, marginRight: 20 }}>
-                    <Ionicons name={icon} size={30} color='red' />
-                </TouchableOpacity>
-                <View style={{ height: 50, marginLeft: 20 }}>
-                    <Text style={{ fontSize: 18, color: '#000', fontWeight: 'bold' }}>Valor Total da Compra </Text>
+            <Portal>
+                <Modal visible={visible} onDismiss={visibilidadeModal} contentContainerStyle={style.input}>
+                    <View style={{ height: 50, marginLeft: 20, marginTop: 40 }}>
+                        <Text style={{ fontSize: 18, color: '#000', fontWeight: 'bold' }}>Valor Total da Compra </Text>
+                        <Text style={{ color: 'red', fontWeight: 'bold' }}>{total.toFixed(2).replace('.', ',')} </Text>
+                    </View>
 
-                    <Text style={{ color: 'red', fontWeight: 'bold' }}>{total.toFixed(2).replace('.', ',')} </Text>
-                </View>
-                <View style={{ margin: 10 }}>
-                    {
-                        cardVisible
-                            ?
-                            <View />
-                            :
-                            <View>
-                                {/* style={{  height: 250}}> */}
-                                <TextInput
-                                    mode='outlined'
-                                    // name='obsevacao'
-                                    placeholder='Observação'
-                                    style={style.input}
-                                    value={observacao}
-                                    onChangeText={(txt) => onChange(txt)}
-                                />
-                                {/* button: {marginTop: 15, backgroundColor: "#E22C43", alignItems: 'flex-end' } */}
-                                <Button title="Dados para entrega" buttonStyle={{ marginTop: 5, borderRadius: 20, padding: 10 }} onPress={() => finalizar()} />
-                            </View>
-                    }
-                </View>
+                    <View style={{ margin: 10 }}>
+                        {/* <View style={{ height: 250 }}> */}
+                        <TextInput
+                            mode='outlined'
+                            // name='obsevacao'
+                            placeholder='Observação'
+                            style={style.input}
+                            value={observacao}
+                            onChangeText={(txt) => onChange(txt)}
+                        />
+                        <Paragraph style={{ marginBottom: 20, fontSize: 15 }}>Selecione a forma de pagamento</Paragraph>
+                        {/* <View style={{ }}> */}
+                        <View style={{ margin: 10, flexDirection: 'row'}}>
+                            <Chip  selected={selectFormaPagamento} selectedColor='#0b2031' style={{ marginHorizontal: 10 }} icon='information' onPress={() => onChangeFormaPagamento('Dinheiro')}>Dinheiro</Chip>
+                            <Chip selected={!selectFormaPagamento} style={{ marginHorizontal: 10 }} icon='information' onPress={() => onChangeFormaPagamento('Cartão')}>Cartão</Chip>
+                        </View>
+                        <Button title='Finalizar' buttonStyle={{ marginTop: 10, borderRadius: 20, padding: 10, paddingHorizontal: 10 }} onPress={finalizar} />
 
-            </Card>
+                    </View>
 
+                </Modal>
+            </Portal>
+            <Button title='Dados para entrega' buttonStyle={{ margin: 10, borderRadius: 20, padding: 10, paddingHorizontal: 10 }} onPress={visibilidadeModal} />
         </View >
     )
 }
@@ -141,11 +157,12 @@ const style = StyleSheet.create({
     input: {
         backgroundColor: 'white',
         textAlign: 'center',
-        marginTop: 20,
-        // margin: 10,
+        padding: 10,
+        // marginTop: 20,
+        margin: 10,
         borderRadius: 50,
         borderWidth: 0.1,
         borderColor: 'transparent',
-        height: 40,
+        // height: 40,
     },
 })

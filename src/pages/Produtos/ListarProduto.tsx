@@ -44,19 +44,29 @@ export function ListarProduto() {
         const data = [] as any;
         const categorias = ['Todos'] as any;
 
-        await firebase.firestore().collection('produto')
+        await firebase.firestore().collection('produtos')
             .onSnapshot(
                 querySnapshot => {
                     querySnapshot.forEach(doc => {
+                        console.log(doc)
+
+
+
+
                         // array de produtos
                         data.push({
-                            ...doc.data(),
+                            //    ...doc.data(),
+                            nome: doc.data().Name,
+                            descricao: doc.data().Description,
+                            imagem: doc.data().Image,
+                            preco: doc.data().Price,
+                            categoria: doc.data().Type,
                             id: doc.id
                         })
 
                         //para usar como filtro
                         categorias.push(
-                            doc.data().categoria,
+                            doc.data().Type,
                         )
                     })
 

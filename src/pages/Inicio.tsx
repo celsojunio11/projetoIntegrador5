@@ -31,18 +31,18 @@ export function Inicio() {
                 style={style.image}
             >
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-             
+
                     <View style={{ marginBottom: 10 }}>
                         <Text style={style.text}>Padaria </Text>
                         <Text style={style.text}>Delivery</Text>
-                        
+
                     </View>
-                    <View style={{ margin:40}}>
-                    <Icon name='coffee' size={60} color='#ffffff' />
+                    <View style={{ margin: 40 }}>
+                        <Icon name='coffee' size={60} color='#ffffff' />
                     </View>
 
                     <View style={{ marginBottom: 1 }}>
-                    
+
                         <Button buttonStyle={style.button} title="Entrar com email" onPress={() => navigation.navigate('Login')} />
                     </View>
 
@@ -50,14 +50,14 @@ export function Inicio() {
                         <Button buttonStyle={style.buttonCadastro} title="Criar conta gratuita" onPress={() => navigation.navigate('Cadastro')} />
                     </View>
 
-                    <View style={{ marginBottom: -30 }}>
-                        <Button buttonStyle={style.buttonGoogle} title="Fazer login com Google" /*onPress={actionLoginGoogle} *//>
+                    {/* <View style={{ marginBottom: -30 }}>
+                        <Button buttonStyle={style.buttonGoogle} title="Fazer login com Google" /*onPress={actionLoginGoogle} />
                         
-                    </View>
+                    </View>*/  }
 
-                    <View style={{ marginBottom: -30 }}>
+                    {/* <View style={{ marginBottom: -30 }}>
                         <Icon name='google' size={30} color='green' />
-                    </View>
+                    </View> */}
 
                 </View>
 

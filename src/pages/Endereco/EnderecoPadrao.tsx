@@ -61,7 +61,7 @@ export function EnderecoPadrao() {
 
         Alert.alert('Salvo com sucesso')
         limparCarrinho()
-        // navigation.navigate('Home')
+        navigation.navigate('Home')
     }
 
     useEffect(() => {

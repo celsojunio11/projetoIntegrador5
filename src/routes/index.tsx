@@ -36,8 +36,8 @@ import { Notificacao } from '../pages/Notificacao'
 // import Config from '../pages/Config'
 
 // import { Mapa } from '../pages/Mapa'
-// import { Padaria } from '../pages/Padarias/Padaria'
-// import { PadariaDetalhes } from '../pages/Padarias/PadariaDetalhes'
+import { Padaria } from '../pages/Padarias/Padaria'
+import { PadariaDetalhes } from '../pages/Padarias/PadariaDetalhes'
 
 
 // importacao context
@@ -104,6 +104,16 @@ function ProdutoStack() {
     )
 }
 
+function PadariaStack() {
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }} > 
+            
+            <Drawer.Screen name="Padaria" component={Padaria} />
+                        <Drawer.Screen name="PadariaDetalhes" component={PadariaDetalhes} />
+        </Stack.Navigator>
+    )
+}
+
 function PadariaDrawer() {
     return (
         <AutenticacaoProvider>
@@ -116,11 +126,8 @@ function PadariaDrawer() {
 
                         <Drawer.Screen name="Carrinho" component={PadariaTab} />
                         <Drawer.Screen name="Produtos" component={ProdutoStack} />
-                        <Drawer.Screen name="Notificacao" component={Notificacao} />
-                        {/* <Drawer.Screen name="Config" component={Config} /> */}
-
-                        {/* <Drawer.Screen name="Detalhes" component={PadariaDetalhes} /> */}
-                        {/* <Drawer.Screen name="Padaria" component={Padaria} /> */}
+                        {/* <Drawer.Screen name="Notificacao" component={Notificacao} /> */}
+                        <Drawer.Screen name="Padaria" component={PadariaStack} />
                         {/* <Drawer.Screen name="Mapa" component={Mapa} /> */}
                         <Drawer.Screen name="Sair" component={AutenticacaoStack} />
 
