@@ -64,7 +64,7 @@ export function Carrinho() {
 
         carrinho.map((x: any) => {
             novoCarrinho.push(
-                { nome: x.nome, quantidade: x.quantidade, preco: x.preco }) // pra pegar só nome e quantidade
+                { id: x.id, nome: x.nome, quantidade: x.quantidade, preco: x.preco }) // pra pegar só nome e quantidade
         })
 
         const dados = {
