@@ -38,15 +38,6 @@ export function ListarProduto() {
         await setFilteredData(filtrados)
     };
 
-    const quantidadePorCategoria = async (categoria: string) => {
-        // console.log(categoria == pesquisa)
-
-        // filteredData?.map((prod =>
-        //     console.log(prod.categoria == categoria)
-        // ))
-    }
-    quantidadePorCategoria('Todos')
-
     const getProduct = async () => {
         const data = [] as any;
         const categorias = ['Todos'] as any;
@@ -55,10 +46,6 @@ export function ListarProduto() {
             .onSnapshot(
                 querySnapshot => {
                     querySnapshot.forEach(doc => {
-                        console.log(doc)
-
-
-
 
                         // array de produtos
                         data.push({
@@ -78,7 +65,11 @@ export function ListarProduto() {
                     })
 
                     setData(data)
-                    setFilteredData(data)
+                    
+                    // data.map((doc): any => {
+                    //     console.log(doc.categoria)
+                    // })
+                    //setFilteredData(data)
                 },
                 error => {
                     console.log(error)
@@ -116,19 +107,3 @@ export function ListarProduto() {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    containerInsert: {
-        //padding: 5,
-        backgroundColor: "#DDD"
-    },
-    input: {
-        fontSize: 15,
-        height: 50,
-        borderWidth: 5,
-        borderRadius: 15,
-        marginBottom: 15,
-        paddingHorizontal: 25,
-        borderColor: "#0B2031",
-    }
-})

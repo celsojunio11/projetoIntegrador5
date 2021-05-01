@@ -18,7 +18,7 @@ interface ProdutoProps {
 export function CardCategoria({ renderItem, action, quantidade }: { renderItem: any, action: () => void, quantidade: number }) {
 
     const { id, nome, descricao, imagem, preco, categoria } = renderItem
- 
+
     return (
         <Card style={st.container}>
             <TouchableOpacity
